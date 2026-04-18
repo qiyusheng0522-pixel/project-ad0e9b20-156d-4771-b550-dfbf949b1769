@@ -119,7 +119,7 @@ const NurseHome = () => {
                   size="sm"
                   variant="outline"
                   className="h-8"
-                  onClick={() => toast({ title: "正在呼叫医生", description: `${a.doctor} · ${a.phone}` })}
+                  onClick={() => navigate(`/nurse/chat/doctor/${a.id}`)}
                 >
                   <Phone className="mr-1 h-3 w-3" />医生
                 </Button>
@@ -127,7 +127,7 @@ const NurseHome = () => {
                   size="sm"
                   variant="outline"
                   className="h-8"
-                  onClick={() => toast({ title: "已打开患者沟通", description: `${a.name} · 床 ${a.bed}` })}
+                  onClick={() => navigate(`/nurse/chat/patient/${a.id}`)}
                 >
                   <MessageSquare className="mr-1 h-3 w-3" />患者
                 </Button>
