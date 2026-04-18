@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { Search, Filter, AlertCircle, CheckCircle2, Activity, Bell, ChevronRight, Phone, MessageSquare, Eye, X, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import {
+  Search, Filter, AlertCircle, CheckCircle2, Activity, Bell, ChevronRight,
+  Phone, MessageSquare, Eye, X, User, Camera, Mic, FileText, Pill, AlertTriangle,
+} from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +23,7 @@ const allPatients = [
 const filterTabs = ["全部", "异常", "正常", "待处理"];
 
 const NurseTasks = () => {
+  const navigate = useNavigate();
   const [selected, setSelected] = useState<number[]>([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("全部");
@@ -229,17 +234,42 @@ const NurseTasks = () => {
           </Button>
         }
       >
-        <div className="space-y-2 py-2">
-          {allPatients.filter((p) => p.abnormal).map((p) => (
-            <label key={p.id} className="flex items-center gap-3 rounded-lg border p-3">
-              <input type="checkbox" defaultChecked className="h-4 w-4 accent-accent" />
-              <div className="flex-1">
-                <p className="text-sm font-medium">{p.name} · 床 {p.bed}</p>
-                <p className="text-[11px] text-muted-foreground">{p.task} · {p.value} {p.metric}</p>
-              </div>
-              <Badge variant="destructive" className="h-5 text-[10px]">异常</Badge>
-            </label>
-          ))}
+        <div className="space-y-3 py-2">
+          <div>
+            <p className="mb-2 text-xs font-medium text-muted-foreground">异常患者</p>
+            <div className="space-y-2">
+              {allPatients.filter((p) => p.abnormal).map((p) => (
+                <label key={p.id} className="flex items-center gap-3 rounded-lg border p-3">
+                  <input type="checkbox" defaultChecked className="h-4 w-4 accent-accent" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">{p.name} · 床 {p.bed}</p>
+                    <p className="text-[11px] text-muted-foreground">{p.task} · {p.value} {p.metric}</p>
+                  </div>
+                  <Badge variant="destructive" className="h-5 text-[10px]">异常</Badge>
+                </label>
+              ))}
+            </div>
+          </div>
+          <div>
+            <p className="mb-2 text-xs font-medium text-muted-foreground">处置证明</p>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { icon: Camera, label: "拍照" },
+                { icon: Activity, label: "体征" },
+                { icon: Mic, label: "录音" },
+              ].map((o) => (
+                <button
+                  key={o.label}
+                  onClick={() => toast({ title: `已添加${o.label}` })}
+                  className="flex flex-col items-center gap-1 rounded-lg border border-dashed border-accent/40 bg-accent/5 p-2.5 text-[11px] text-accent hover:bg-accent/10"
+                >
+                  <o.icon className="h-4 w-4" />
+                  {o.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <Textarea placeholder="处置说明(可选)" className="min-h-[50px] text-xs" />
         </div>
       </ActionSheet>
 
@@ -250,10 +280,18 @@ const NurseTasks = () => {
         description={patientSheet ? `${patientSheet.age} 岁 · 主治 ${patientSheet.doctor}` : ""}
         footer={
           <div className="grid grid-cols-3 gap-2">
-            <Button variant="outline" size="sm" onClick={() => toast({ title: "正在呼叫医生" })}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => patientSheet && navigate(`/nurse/chat/doctor/${patientSheet.id}`)}
+            >
               <Phone className="mr-1 h-3 w-3" />医生
             </Button>
-            <Button variant="outline" size="sm" onClick={() => toast({ title: "已打开患者沟通" })}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => patientSheet && navigate(`/nurse/chat/patient/${patientSheet.id}`)}
+            >
               <MessageSquare className="mr-1 h-3 w-3" />患者
             </Button>
             <Button size="sm" className="bg-gradient-nurse" onClick={() => { toast({ title: "已标记完成" }); setPatientSheet(null); }}>
@@ -264,6 +302,39 @@ const NurseTasks = () => {
       >
         {patientSheet && (
           <div className="space-y-3 py-2">
+            {/* 基本信息 */}
+            <div className="grid grid-cols-3 gap-2 rounded-lg border bg-muted/20 p-2.5 text-[11px]">
+              <div>
+                <p className="text-muted-foreground">入院日期</p>
+                <p className="mt-0.5 font-medium">11-05</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground">住院天数</p>
+                <p className="mt-0.5 font-medium">5 天</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground">护理等级</p>
+                <p className="mt-0.5 font-medium text-warning">二级</p>
+              </div>
+            </div>
+
+            {/* 诊断 / 过敏 */}
+            <div className="space-y-2">
+              <div className="rounded-lg bg-primary/5 p-2.5 text-xs">
+                <div className="mb-1 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wide text-primary">
+                  <FileText className="h-3 w-3" />主要诊断
+                </div>
+                {patientSheet.abnormal ? "高血压 III 级 · 冠心病" : "2 型糖尿病"}
+              </div>
+              <div className="rounded-lg bg-destructive/5 p-2.5 text-xs">
+                <div className="mb-1 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wide text-destructive">
+                  <AlertTriangle className="h-3 w-3" />过敏史
+                </div>
+                青霉素 · 头孢类
+              </div>
+            </div>
+
+            {/* 当前指标 */}
             <div className={`rounded-lg p-3 text-xs ${patientSheet.abnormal ? "bg-destructive/5" : "bg-muted/40"}`}>
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">{patientSheet.task}</span>
@@ -273,6 +344,25 @@ const NurseTasks = () => {
               </div>
               <p className="mt-1 text-[11px] text-muted-foreground">最近测量:5 分钟前</p>
             </div>
+
+            {/* 用药 */}
+            <div>
+              <p className="mb-1.5 text-xs font-medium text-muted-foreground">当前用药</p>
+              <div className="space-y-1.5">
+                {[
+                  { name: "硝苯地平缓释片", dose: "30mg · 每日 1 次" },
+                  { name: "美托洛尔", dose: "25mg · 每日 2 次" },
+                ].map((m) => (
+                  <div key={m.name} className="flex items-center gap-2 rounded-lg border bg-card p-2 text-[11px]">
+                    <Pill className="h-3.5 w-3.5 text-accent" />
+                    <span className="flex-1 font-medium">{m.name}</span>
+                    <span className="text-muted-foreground">{m.dose}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 任务进展 */}
             <div className="space-y-2 text-xs">
               <p className="font-medium text-muted-foreground">今日任务进展</p>
               {[

@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   AlertTriangle, Phone, MessageSquare, CheckCircle2, Clock, Bell,
-  Users, Activity, ListChecks, Sparkles, Trash2, FileCheck2, ChevronRight, X
+  Users, Activity, ListChecks, Sparkles, Trash2, FileCheck2, ChevronRight, X,
+  Camera, Mic, FileText as FileTextIcon,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -118,7 +119,7 @@ const NurseHome = () => {
                   size="sm"
                   variant="outline"
                   className="h-8"
-                  onClick={() => toast({ title: "正在呼叫医生", description: `${a.doctor} · ${a.phone}` })}
+                  onClick={() => navigate(`/nurse/chat/doctor/${a.id}`)}
                 >
                   <Phone className="mr-1 h-3 w-3" />医生
                 </Button>
@@ -126,7 +127,7 @@ const NurseHome = () => {
                   size="sm"
                   variant="outline"
                   className="h-8"
-                  onClick={() => toast({ title: "已打开患者沟通", description: `${a.name} · 床 ${a.bed}` })}
+                  onClick={() => navigate(`/nurse/chat/patient/${a.id}`)}
                 >
                   <MessageSquare className="mr-1 h-3 w-3" />患者
                 </Button>
@@ -261,6 +262,42 @@ const NurseHome = () => {
                   </li>
                 ))}
               </ul>
+            </div>
+            <div>
+              <p className="mb-2 text-xs font-medium text-muted-foreground">处置证明 <span className="text-destructive">*</span></p>
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { icon: Camera, label: "现场照片" },
+                  { icon: Activity, label: "体征截图" },
+                  { icon: Mic, label: "语音记录" },
+                ].map((o) => (
+                  <button
+                    key={o.label}
+                    onClick={() => toast({ title: `已添加${o.label}`, description: "已附加到处置记录" })}
+                    className="flex flex-col items-center gap-1 rounded-lg border border-dashed border-accent/40 bg-accent/5 p-2.5 text-[11px] text-accent hover:bg-accent/10"
+                  >
+                    <o.icon className="h-4 w-4" />
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-2 rounded-lg border bg-muted/30 p-2.5">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="flex items-center gap-1.5"><FileTextIcon className="h-3 w-3 text-success" />医嘱执行单 #20241108-031</span>
+                  <span className="text-success">已关联</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <p className="mb-1.5 text-xs font-medium text-muted-foreground">处置结果</p>
+              <div className="grid grid-cols-3 gap-1.5">
+                {["已处理", "已上报", "持续观察"].map((r, i) => (
+                  <label key={r} className="flex items-center justify-center gap-1 rounded-lg border p-2 text-[11px] hover:border-accent">
+                    <input type="radio" name="result" defaultChecked={i === 0} className="h-3 w-3 accent-accent" />
+                    {r}
+                  </label>
+                ))}
+              </div>
             </div>
             <div>
               <p className="mb-1.5 text-xs font-medium text-muted-foreground">备注</p>
