@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { Search, Filter, AlertCircle, CheckCircle2, Activity, Bell, ChevronRight, Phone, MessageSquare, Eye, X, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import {
+  Search, Filter, AlertCircle, CheckCircle2, Activity, Bell, ChevronRight,
+  Phone, MessageSquare, Eye, X, User, Camera, Mic, FileText, Pill, AlertTriangle,
+} from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
