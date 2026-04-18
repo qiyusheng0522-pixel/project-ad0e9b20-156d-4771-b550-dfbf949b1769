@@ -11,6 +11,7 @@ import NurseHome from "./pages/nurse/NurseHome.tsx";
 import NurseTasks from "./pages/nurse/NurseTasks.tsx";
 import NurseHandover from "./pages/nurse/NurseHandover.tsx";
 import NurseEducation from "./pages/nurse/NurseEducation.tsx";
+import NurseChat from "./pages/nurse/NurseChat.tsx";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="tasks" element={<NurseTasks />} />
             <Route path="handover" element={<NurseHandover />} />
             <Route path="education" element={<NurseEducation />} />
+            <Route path="chat/:type/:id" element={<NurseChat />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
