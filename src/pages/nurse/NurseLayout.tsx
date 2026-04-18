@@ -1,5 +1,6 @@
 import { NavLink, Outlet, Link } from "react-router-dom";
 import { Home, ClipboardCheck, LogOut as LogOutIcon, BookOpen, ArrowLeft, Bell, HeartPulse } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 const tabs = [
   { to: "/nurse", icon: Home, label: "工作台", end: true },
@@ -27,7 +28,10 @@ const NurseLayout = () => {
               <p className="text-[11px] opacity-80">心内科 · 李护士</p>
             </div>
           </div>
-          <button className="relative rounded-full p-1.5 hover:bg-white/10">
+          <button
+            onClick={() => toast({ title: "您有 3 条未读通知", description: "请前往工作台查看预警详情" })}
+            className="relative rounded-full p-1.5 hover:bg-white/10"
+          >
             <Bell className="h-5 w-5" />
             <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-warning" />
           </button>
