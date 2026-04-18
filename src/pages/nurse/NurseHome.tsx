@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   AlertTriangle, Phone, MessageSquare, CheckCircle2, Clock, Bell,
-  Users, Activity, ListChecks, Sparkles, Trash2, FileCheck2, ChevronRight, X
+  Users, Activity, ListChecks, Sparkles, Trash2, FileCheck2, ChevronRight, X,
+  Camera, Mic, FileText as FileTextIcon,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
