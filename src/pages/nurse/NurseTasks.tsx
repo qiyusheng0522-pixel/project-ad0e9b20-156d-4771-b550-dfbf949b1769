@@ -23,6 +23,7 @@ const allPatients = [
 const filterTabs = ["全部", "异常", "正常", "待处理"];
 
 const NurseTasks = () => {
+  const navigate = useNavigate();
   const [selected, setSelected] = useState<number[]>([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("全部");
