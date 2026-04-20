@@ -13,23 +13,16 @@ import { toast } from "@/hooks/use-toast";
 import ActionSheet from "@/components/nurse/ActionSheet";
 
 const initialPlans = [
-  { id: 1, patient: "张伟 · 床位 0312", title: "高血压术后护理方案", level: "高优先级", items: ["每4小时测量血压", "低盐饮食宣教", "活动量监测", "服药提醒(降压药×2)"] },
-  { id: 2, patient: "李娜 · 床位 0508", title: "糖尿病日常管理", level: "常规", items: ["三餐前血糖监测", "胰岛素注射记录", "足部检查", "运动方案宣教"] },
-  { id: 3, patient: "王强 · 床位 0215", title: "冠心病康复护理", level: "常规", items: ["心率/血氧监测", "心理疏导", "用药依从性评估"] },
+  { id: 1, patient: "张伟 · 床位 0312", title: "高血压术后护理方案", level: "高优先级", items: ["每4小时测量血压", "低盐饮食宣教", "服药提醒(降压药×2)"] },
 ];
 
 const alerts = [
   { id: 1, bed: "0312", name: "张伟", desc: "血压异常飙升 · 178/108 mmHg", level: "危急", doctor: "王主任", phone: "13800138001" },
-  { id: 2, bed: "0508", name: "李娜", desc: "求助信息 · 持续头晕", level: "待处理", doctor: "李医生", phone: "13800138002" },
 ];
 
 const todos = [
   { level: "urgent" as const, title: "患者打卡监督", desc: "床位 0215 · 服药打卡逾期", detail: "王强(床位 0215)的降压药打卡已逾期 35 分钟,请联系患者或床旁确认。" },
-  { level: "urgent" as const, title: "出院手续办理", desc: "床位 0408 · 王芳", detail: "王芳办理出院,请准备交接清单、用药指导单及复查计划。" },
-  { level: "urgent" as const, title: "逾期任务跟进", desc: "3 项护理记录待补", detail: "0312/0508/0215 三位患者的护理记录需在班次结束前补全。" },
   { level: "normal" as const, title: "健康宣教推送", desc: "心内科患者 · 12 人", detail: "向心内科 12 位患者批量推送《高血压日常管理》。" },
-  { level: "normal" as const, title: "护理记录填写", desc: "日间班次 · 8 项", detail: "本班次共 8 项常规护理记录待填写。" },
-  { level: "normal" as const, title: "提醒事项确认", desc: "夜班交接 · 18:00", detail: "18:00 与夜班护士长进行口头交接确认。" },
 ];
 
 const NurseHome = () => {
@@ -89,7 +82,7 @@ const NurseHome = () => {
   };
 
   return (
-    <div className="space-y-4 p-4">
+    <div className="space-y-3 p-3">
       {/* 紧急求助 */}
       <Card className="overflow-hidden border-destructive/30 bg-destructive/5">
         <div className="flex items-center justify-between border-b border-destructive/20 bg-destructive/10 px-4 py-2.5">
@@ -157,14 +150,14 @@ const NurseHome = () => {
         <div className="flex items-center justify-between border-b px-4 py-3">
           <div>
             <h3 className="text-sm font-semibold">今日待办</h3>
-            <p className="text-xs text-muted-foreground">高优先级 3 · 常规 7</p>
+            <p className="text-xs text-muted-foreground">高优先级 1 · 常规 1</p>
           </div>
           <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => setTodoListSheet(true)}>
             全部 <ChevronRight className="ml-0.5 h-3 w-3" />
           </Button>
         </div>
         <div className="divide-y">
-          {todos.slice(0, 6).map((t, i) => (
+          {todos.map((t, i) => (
             <button key={i} onClick={() => setTodoSheet(t)} className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-muted/50">
               <div className={`h-8 w-1 shrink-0 rounded-full ${t.level === "urgent" ? "bg-destructive" : "bg-accent"}`} />
               <div className="min-w-0 flex-1">
