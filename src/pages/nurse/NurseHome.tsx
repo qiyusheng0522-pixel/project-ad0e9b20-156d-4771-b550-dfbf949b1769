@@ -150,14 +150,14 @@ const NurseHome = () => {
         <div className="flex items-center justify-between border-b px-4 py-3">
           <div>
             <h3 className="text-sm font-semibold">今日待办</h3>
-            <p className="text-xs text-muted-foreground">高优先级 3 · 常规 7</p>
+            <p className="text-xs text-muted-foreground">高优先级 1 · 常规 1</p>
           </div>
           <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => setTodoListSheet(true)}>
             全部 <ChevronRight className="ml-0.5 h-3 w-3" />
           </Button>
         </div>
         <div className="divide-y">
-          {todos.slice(0, 6).map((t, i) => (
+          {todos.map((t, i) => (
             <button key={i} onClick={() => setTodoSheet(t)} className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-muted/50">
               <div className={`h-8 w-1 shrink-0 rounded-full ${t.level === "urgent" ? "bg-destructive" : "bg-accent"}`} />
               <div className="min-w-0 flex-1">
