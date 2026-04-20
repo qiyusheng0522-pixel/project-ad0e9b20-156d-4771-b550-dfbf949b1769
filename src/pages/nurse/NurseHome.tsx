@@ -82,7 +82,7 @@ const NurseHome = () => {
   };
 
   return (
-    <div className="space-y-4 p-4">
+    <div className="space-y-3 p-3">
       {/* 紧急求助 */}
       <Card className="overflow-hidden border-destructive/30 bg-destructive/5">
         <div className="flex items-center justify-between border-b border-destructive/20 bg-destructive/10 px-4 py-2.5">
