@@ -32,11 +32,14 @@ const NurseTasks = () => {
   const [actionSheet, setActionSheet] = useState<string | null>(null);
   const [batchSheet, setBatchSheet] = useState<"remind" | "complete" | null>(null);
 
-  const patients = allPatients.filter((p) => {
-    const matchSearch = !search || p.name.includes(search) || p.bed.includes(search);
-    const matchFilter = filter === "全部" || p.status === filter;
-    return matchSearch && matchFilter;
-  });
+  const patients = allPatients
+    .filter((p) => {
+      const matchSearch = !search || p.name.includes(search) || p.bed.includes(search);
+      const matchFilter = filter === "全部" || p.status === filter;
+      return matchSearch && matchFilter;
+    })
+    // 异常患者置顶
+    .sort((a, b) => Number(b.abnormal) - Number(a.abnormal));
 
   const toggle = (id: number) => {
     setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
@@ -72,10 +75,13 @@ const NurseTasks = () => {
             <p className="text-xs text-muted-foreground">在线监测</p>
             <p className="mt-1 text-xl font-semibold text-primary">42</p>
           </div>
-          <div className="p-3 text-center">
-            <p className="text-xs text-muted-foreground">异常高亮</p>
+          <button
+            onClick={() => setFilter("异常")}
+            className={`p-3 text-center transition-colors hover:bg-destructive/5 ${filter === "异常" ? "bg-destructive/10" : ""}`}
+          >
+            <p className="text-xs text-muted-foreground">异常高亮 →</p>
             <p className="mt-1 text-xl font-semibold text-destructive">2</p>
-          </div>
+          </button>
           <div className="p-3 text-center">
             <p className="text-xs text-muted-foreground">消息推送</p>
             <p className="mt-1 text-xl font-semibold text-accent">15</p>
@@ -159,7 +165,7 @@ const NurseTasks = () => {
           {patients.map((p) => (
             <div
               key={p.id}
-              className={`flex items-center gap-3 px-4 py-3 transition-colors ${selected.includes(p.id) ? "bg-accent/5" : "hover:bg-muted/50"}`}
+              className={`flex items-center gap-2 px-3 py-2.5 transition-colors ${selected.includes(p.id) ? "bg-accent/5" : p.abnormal ? "bg-destructive/5" : "hover:bg-muted/50"}`}
             >
               <input
                 type="checkbox"
@@ -167,17 +173,43 @@ const NurseTasks = () => {
                 onChange={() => toggle(p.id)}
                 className="h-4 w-4 shrink-0 accent-accent"
               />
-              <button onClick={() => setPatientSheet(p)} className="flex min-w-0 flex-1 items-center gap-3 text-left">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted text-xs font-semibold">{p.bed}</div>
+              <button onClick={() => setPatientSheet(p)} className="flex min-w-0 flex-1 items-center gap-2.5 text-left">
+                <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-xs font-semibold ${p.abnormal ? "bg-destructive/15 text-destructive" : "bg-muted"}`}>{p.bed}</div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5">
                     <span className="text-sm font-medium">{p.name}</span>
-                    {p.abnormal && <Badge variant="destructive" className="h-4 px-1 text-[9px]">异常</Badge>}
+                    {p.abnormal && <Badge variant="destructive" className="h-4 px-1 text-[9px]">{p.task.replace("监测", "异常")}</Badge>}
                   </div>
-                  <p className="truncate text-[11px] text-muted-foreground">{p.task} · {p.value}{p.metric && ` ${p.metric}`}</p>
+                  <p className="truncate text-[11px] text-muted-foreground">
+                    {p.task} · <span className={p.abnormal ? "font-semibold text-destructive" : ""}>{p.value}{p.metric && ` ${p.metric}`}</span>
+                    {p.abnormal && <span className="ml-0.5 text-destructive">↑</span>}
+                  </p>
                 </div>
-                <ChevronRight className="h-4 w-4 text-muted-foreground" />
               </button>
+              {/* 行内图标快捷操作 */}
+              <div className="flex shrink-0 items-center gap-0.5">
+                <button
+                  onClick={() => navigate(`/nurse/chat/doctor/${p.id}`)}
+                  className="flex h-7 w-7 items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-primary"
+                  aria-label="联系医生"
+                >
+                  <Phone className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  onClick={() => navigate(`/nurse/chat/patient/${p.id}`)}
+                  className="flex h-7 w-7 items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-accent"
+                  aria-label="联系患者"
+                >
+                  <MessageSquare className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  onClick={() => setPatientSheet(p)}
+                  className="flex h-7 w-7 items-center justify-center rounded text-muted-foreground hover:bg-muted"
+                  aria-label="查看详情"
+                >
+                  <Eye className="h-3.5 w-3.5" />
+                </button>
+              </div>
             </div>
           ))}
         </div>
