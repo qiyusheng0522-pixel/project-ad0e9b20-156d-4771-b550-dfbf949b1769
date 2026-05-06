@@ -75,10 +75,13 @@ const NurseTasks = () => {
             <p className="text-xs text-muted-foreground">在线监测</p>
             <p className="mt-1 text-xl font-semibold text-primary">42</p>
           </div>
-          <div className="p-3 text-center">
-            <p className="text-xs text-muted-foreground">异常高亮</p>
+          <button
+            onClick={() => setFilter("异常")}
+            className={`p-3 text-center transition-colors hover:bg-destructive/5 ${filter === "异常" ? "bg-destructive/10" : ""}`}
+          >
+            <p className="text-xs text-muted-foreground">异常高亮 →</p>
             <p className="mt-1 text-xl font-semibold text-destructive">2</p>
-          </div>
+          </button>
           <div className="p-3 text-center">
             <p className="text-xs text-muted-foreground">消息推送</p>
             <p className="mt-1 text-xl font-semibold text-accent">15</p>
