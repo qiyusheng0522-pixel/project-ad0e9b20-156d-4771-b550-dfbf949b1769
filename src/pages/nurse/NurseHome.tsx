@@ -245,7 +245,7 @@ const NurseHome = () => {
               <FileCheck2 className="mr-1 h-3 w-3" />一键审核
             </Button>
             <Button size="sm" variant="outline" onClick={() => setConfirmClear(true)} disabled={!plans.length} className="h-8 border-destructive/40 text-xs text-destructive hover:bg-destructive/10 hover:text-destructive">
-              <Trash2 className="mr-1 h-3 w-3" />一键清空
+              <Trash2 className="mr-1 h-3 w-3" />批量归档
             </Button>
           </div>
         </div>
