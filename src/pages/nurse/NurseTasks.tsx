@@ -32,11 +32,14 @@ const NurseTasks = () => {
   const [actionSheet, setActionSheet] = useState<string | null>(null);
   const [batchSheet, setBatchSheet] = useState<"remind" | "complete" | null>(null);
 
-  const patients = allPatients.filter((p) => {
-    const matchSearch = !search || p.name.includes(search) || p.bed.includes(search);
-    const matchFilter = filter === "全部" || p.status === filter;
-    return matchSearch && matchFilter;
-  });
+  const patients = allPatients
+    .filter((p) => {
+      const matchSearch = !search || p.name.includes(search) || p.bed.includes(search);
+      const matchFilter = filter === "全部" || p.status === filter;
+      return matchSearch && matchFilter;
+    })
+    // 异常患者置顶
+    .sort((a, b) => Number(b.abnormal) - Number(a.abnormal));
 
   const toggle = (id: number) => {
     setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
