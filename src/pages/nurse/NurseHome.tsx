@@ -189,12 +189,13 @@ const NurseHome = () => {
       </Card>
 
 
-      {/* 今日待办 */}
+      {/* 待处理 - 聚合按优先级排序 */}
       <Card className="overflow-hidden">
-        <div className="flex items-center justify-between border-b px-4 py-3">
-          <div>
-            <h3 className="text-sm font-semibold">今日待办</h3>
-            <p className="text-xs text-muted-foreground">高优先级 1 · 常规 1</p>
+        <div className="flex items-center justify-between border-b px-4 py-2.5">
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm font-semibold">待处理</h3>
+            <Badge variant="secondary" className="h-5">{todos.length}</Badge>
+            <Badge variant="destructive" className="h-5 text-[10px]">高 {todos.filter((t) => t.level === "urgent").length}</Badge>
           </div>
           <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => setTodoListSheet(true)}>
             全部 <ChevronRight className="ml-0.5 h-3 w-3" />
@@ -202,14 +203,26 @@ const NurseHome = () => {
         </div>
         <div className="divide-y">
           {todos.map((t, i) => (
-            <button key={i} onClick={() => setTodoSheet(t)} className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-muted/50">
-              <div className={`h-8 w-1 shrink-0 rounded-full ${t.level === "urgent" ? "bg-destructive" : "bg-accent"}`} />
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm">{t.title}</p>
+            <div key={i} className="flex items-center gap-2.5 px-4 py-2.5">
+              <div className={`h-9 w-1 shrink-0 rounded-full ${t.level === "urgent" ? "bg-destructive" : "bg-accent"}`} />
+              <button onClick={() => setTodoSheet(t)} className="min-w-0 flex-1 text-left">
+                <div className="flex items-center gap-1.5">
+                  {t.level === "urgent" && (
+                    <span className="rounded bg-destructive/15 px-1 py-0.5 text-[9px] font-bold text-destructive">高</span>
+                  )}
+                  <p className="truncate text-sm">{t.title}</p>
+                </div>
                 <p className="truncate text-[11px] text-muted-foreground">{t.desc}</p>
-              </div>
-              <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-            </button>
+              </button>
+              <Button
+                size="sm"
+                variant={t.level === "urgent" ? "default" : "outline"}
+                className={`h-7 px-2 text-[11px] ${t.level === "urgent" ? "bg-destructive hover:bg-destructive/90" : ""}`}
+                onClick={() => toast({ title: t.quickAction, description: t.title })}
+              >
+                {t.quickAction}
+              </Button>
+            </div>
           ))}
         </div>
       </Card>
