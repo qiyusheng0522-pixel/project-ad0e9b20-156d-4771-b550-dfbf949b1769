@@ -228,8 +228,16 @@ const NurseHome = () => {
                 </div>
                 <ul className="mt-2 space-y-1">
                   {p.items.map((it, i) => (
-                    <li key={i} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <span className="h-1 w-1 shrink-0 rounded-full bg-accent" />{it}
+                    <li key={i} className="flex items-start gap-1.5 text-xs">
+                      <span className={`mt-1 h-1.5 w-1.5 shrink-0 rounded-full ${it.risk === "warn" ? "bg-warning" : "bg-success"}`} />
+                      <span className="flex-1 text-foreground/80">
+                        {it.text}
+                        {it.note && (
+                          <span className={`ml-1 rounded px-1 py-0.5 text-[10px] ${it.risk === "warn" ? "bg-warning/15 text-warning" : "bg-success/15 text-success"}`}>
+                            {it.risk === "warn" ? "需关注" : "规范"}
+                          </span>
+                        )}
+                      </span>
                     </li>
                   ))}
                 </ul>
