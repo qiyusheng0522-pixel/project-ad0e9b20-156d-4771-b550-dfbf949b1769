@@ -59,7 +59,12 @@ const NurseHome = () => {
         patient: "陈敏 · 床位 0617",
         title: "AI 推荐 · 心律失常观察护理",
         level: "高优先级",
-        items: ["持续心电监护", "每2小时记录心率", "情绪安抚", "急救药物床旁备用"],
+        items: [
+          { text: "持续心电监护", risk: "ok" as const, note: "符合临床规范" },
+          { text: "每2小时记录心率", risk: "warn" as const, note: "建议增加血氧记录" },
+          { text: "情绪安抚", risk: "ok" as const },
+          { text: "急救药物床旁备用", risk: "ok" as const },
+        ] as PlanItem[],
       };
       setPlans((p) => [next, ...p]);
       setGenerating(false);
