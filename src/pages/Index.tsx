@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Stethoscope, HeartPulse, ArrowRight, Activity } from "lucide-react";
+import { Stethoscope, HeartPulse, ArrowRight, Activity, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
@@ -25,7 +25,7 @@ const Index = () => {
           </p>
         </div>
 
-        <div className="mx-auto mt-12 grid max-w-5xl gap-6 md:grid-cols-2">
+        <div className="mx-auto mt-12 grid max-w-6xl gap-6 md:grid-cols-3">
           <Link
             to="/doctor"
             className="group relative overflow-hidden rounded-2xl border bg-card p-8 shadow-card transition-all hover:-translate-y-1 hover:shadow-elegant"
@@ -70,6 +70,30 @@ const Index = () => {
               </ul>
               <Button className="mt-8 w-full bg-gradient-nurse hover:opacity-90">
                 进入护士端 <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </div>
+          </Link>
+
+          <Link
+            to="/community"
+            className="group relative overflow-hidden rounded-2xl border bg-card p-8 shadow-card transition-all hover:-translate-y-1 hover:shadow-elegant"
+          >
+            <div className="absolute right-0 top-0 h-32 w-32 -translate-y-12 translate-x-12 rounded-full bg-gradient-community opacity-10 transition-transform group-hover:scale-150" />
+            <div className="relative">
+              <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-community text-primary-foreground shadow-soft">
+                <Building2 className="h-7 w-7" />
+              </div>
+              <h2 className="text-2xl font-semibold">社区端小程序</h2>
+              <p className="mt-2 text-muted-foreground">
+                接收下转患者、随访任务、血糖血压录入与一键上转
+              </p>
+              <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-success" />医院下转患者档案</li>
+                <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-success" />核心数据采集与异常预警</li>
+                <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-success" />一键上转 + 消息通知</li>
+              </ul>
+              <Button className="mt-8 w-full bg-gradient-community hover:opacity-90">
+                进入社区端 <ArrowRight className="ml-1 h-4 w-4" />
               </Button>
             </div>
           </Link>
