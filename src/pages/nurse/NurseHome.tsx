@@ -100,67 +100,94 @@ const NurseHome = () => {
 
   return (
     <div className="space-y-3 p-3">
-      {/* 紧急求助 */}
-      <Card className="overflow-hidden border-destructive/30 bg-destructive/5">
-        <div className="flex items-center justify-between border-b border-destructive/20 bg-destructive/10 px-4 py-2.5">
+      {/* 紧急预警 - 危急强化 */}
+      <Card className="animate-critical-pulse overflow-hidden border-2 border-destructive/60 bg-destructive/5">
+        <div className="flex items-center justify-between border-b border-destructive/30 bg-destructive/15 px-4 py-2.5">
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-4 w-4 text-destructive" />
             <span className="text-sm font-semibold text-destructive">紧急预警 · 患者求助</span>
           </div>
-          <Badge variant="destructive" className="h-5">{alerts.length} 条</Badge>
+          <Badge variant="destructive" className="h-5 animate-pulse">{alerts.length} 危急</Badge>
         </div>
         <div className="divide-y divide-destructive/15">
-          {alerts.map((a) => (
-            <div key={a.id} className="p-3">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-sm font-medium">床位 {a.bed} · {a.name}</p>
-                  <p className="text-xs text-muted-foreground">{a.desc}</p>
+          {alerts.map((a) => {
+            // 颜色分级:危急=红, 高危=橙, 预警=黄
+            const tone =
+              a.level === "危急"
+                ? { bar: "bg-destructive", badge: "bg-destructive text-destructive-foreground", text: "text-destructive" }
+                : { bar: "bg-warning", badge: "bg-warning text-warning-foreground", text: "text-warning" };
+            return (
+              <div key={a.id} className="p-3">
+                <div className="flex items-start gap-2">
+                  <span className={`mt-1 h-10 w-1 shrink-0 rounded-full ${tone.bar}`} />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-semibold">床位 {a.bed} · {a.name}</p>
+                      <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${tone.badge}`}>{a.level}</span>
+                    </div>
+                    <p className={`mt-0.5 text-xs font-medium ${tone.text}`}>{a.desc}</p>
+                  </div>
                 </div>
-                <Badge
-                  variant={a.level === "危急" ? "destructive" : "outline"}
-                  className={a.level === "危急" ? "h-5 text-[10px]" : "h-5 border-warning text-[10px] text-warning"}
-                >
-                  {a.level}
-                </Badge>
+                {/* 处置按钮主导,医生/患者后置缩小 */}
+                <div className="mt-2.5 flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    className={`h-9 flex-1 text-sm font-semibold ${a.level === "危急" ? "bg-destructive hover:bg-destructive/90" : "bg-gradient-nurse"}`}
+                    onClick={() => setAlertSheet(a)}
+                  >
+                    <CheckCircle2 className="mr-1 h-4 w-4" />立即处置
+                  </Button>
+                  <button
+                    onClick={() => navigate(`/nurse/chat/doctor/${a.id}`)}
+                    className="flex h-9 w-9 items-center justify-center rounded-md border text-muted-foreground hover:bg-muted"
+                    aria-label="联系医生"
+                  >
+                    <Phone className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => navigate(`/nurse/chat/patient/${a.id}`)}
+                    className="flex h-9 w-9 items-center justify-center rounded-md border text-muted-foreground hover:bg-muted"
+                    aria-label="联系患者"
+                  >
+                    <MessageSquare className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
-              <div className="mt-2 grid grid-cols-3 gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="h-8"
-                  onClick={() => navigate(`/nurse/chat/doctor/${a.id}`)}
-                >
-                  <Phone className="mr-1 h-3 w-3" />医生
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="h-8"
-                  onClick={() => navigate(`/nurse/chat/patient/${a.id}`)}
-                >
-                  <MessageSquare className="mr-1 h-3 w-3" />患者
-                </Button>
-                <Button
-                  size="sm"
-                  className={a.level === "危急" ? "h-8 bg-destructive hover:bg-destructive/90" : "h-8 bg-gradient-nurse"}
-                  onClick={() => setAlertSheet(a)}
-                >
-                  <CheckCircle2 className="mr-1 h-3 w-3" />处置
-                </Button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </Card>
 
-      {/* 今日统计 */}
-      <div className="grid grid-cols-2 gap-2.5">
-        <StatCard icon={Users} label="院内患者" value="42" sub="新入 3" color="text-primary" bg="bg-primary/10" onClick={() => navigate("/nurse/tasks")} />
-        <StatCard icon={Activity} label="院外随访" value="86" sub="待跟进 12" color="text-accent" bg="bg-accent/10" onClick={() => setStatSheet({ label: "院外随访", value: "86" })} />
-        <StatCard icon={ListChecks} label="任务完成" value="28/35" sub="80%" color="text-success" bg="bg-success/10" onClick={() => setStatSheet({ label: "任务完成", value: "28/35" })} />
-        <StatCard icon={Bell} label="预警次数" value="6" sub="今日" color="text-warning" bg="bg-warning/10" onClick={() => setNotifySheet(true)} />
-      </div>
+      {/* 今日核心数据 - 一行式卡片 */}
+      <Card className="overflow-hidden">
+        <div className="flex items-center justify-between border-b px-4 py-2">
+          <span className="text-xs font-medium text-muted-foreground">今日核心数据</span>
+          <span className="text-[10px] text-muted-foreground">↗ 较昨日</span>
+        </div>
+        <div className="grid grid-cols-4 divide-x">
+          <button onClick={() => navigate("/nurse/tasks")} className="flex flex-col items-center py-2.5 hover:bg-muted/40">
+            <Users className="h-3.5 w-3.5 text-primary" />
+            <span className="mt-1 text-base font-bold text-primary">42</span>
+            <span className="text-[10px] text-muted-foreground">院内</span>
+          </button>
+          <button onClick={() => setStatSheet({ label: "院外随访", value: "86" })} className="flex flex-col items-center py-2.5 hover:bg-muted/40">
+            <Activity className="h-3.5 w-3.5 text-accent" />
+            <span className="mt-1 text-base font-bold text-accent">86</span>
+            <span className="text-[10px] text-muted-foreground">院外</span>
+          </button>
+          <button onClick={() => setStatSheet({ label: "任务完成", value: "28/35" })} className="flex flex-col items-center py-2.5 hover:bg-muted/40">
+            <ListChecks className="h-3.5 w-3.5 text-success" />
+            <span className="mt-1 text-base font-bold text-success">80%</span>
+            <span className="text-[10px] text-muted-foreground">完成率</span>
+          </button>
+          <button onClick={() => setNotifySheet(true)} className="flex flex-col items-center py-2.5 hover:bg-muted/40">
+            <Bell className="h-3.5 w-3.5 text-destructive" />
+            <span className="mt-1 text-base font-bold text-destructive">6</span>
+            <span className="text-[10px] text-muted-foreground">预警</span>
+          </button>
+        </div>
+      </Card>
+
 
       {/* 今日待办 */}
       <Card className="overflow-hidden">
