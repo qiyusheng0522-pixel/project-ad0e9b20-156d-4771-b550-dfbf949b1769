@@ -467,7 +467,7 @@ const NurseHome = () => {
               <ul className="mt-2 space-y-1">
                 {planAction.plan.items.map((it, i) => (
                   <li key={i} className="flex items-center gap-1.5">
-                    <span className="h-1 w-1 shrink-0 rounded-full bg-accent" />{it}
+                    <span className={`h-1 w-1 shrink-0 rounded-full ${it.risk === "warn" ? "bg-warning" : "bg-accent"}`} />{it.text}
                   </li>
                 ))}
               </ul>
