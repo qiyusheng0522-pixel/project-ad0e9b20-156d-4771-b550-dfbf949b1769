@@ -12,6 +12,11 @@ import NurseTasks from "./pages/nurse/NurseTasks.tsx";
 import NurseHandover from "./pages/nurse/NurseHandover.tsx";
 import NurseEducation from "./pages/nurse/NurseEducation.tsx";
 import NurseChat from "./pages/nurse/NurseChat.tsx";
+import CommunityLayout from "./pages/community/CommunityLayout.tsx";
+import CommunityHome from "./pages/community/CommunityHome.tsx";
+import CommunityPatients from "./pages/community/CommunityPatients.tsx";
+import CommunityVitals from "./pages/community/CommunityVitals.tsx";
+import CommunityMessages from "./pages/community/CommunityMessages.tsx";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +35,12 @@ const App = () => (
             <Route path="handover" element={<NurseHandover />} />
             <Route path="education" element={<NurseEducation />} />
             <Route path="chat/:type/:id" element={<NurseChat />} />
+          </Route>
+          <Route path="/community" element={<CommunityLayout />}>
+            <Route index element={<CommunityHome />} />
+            <Route path="patients" element={<CommunityPatients />} />
+            <Route path="vitals" element={<CommunityVitals />} />
+            <Route path="messages" element={<CommunityMessages />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
