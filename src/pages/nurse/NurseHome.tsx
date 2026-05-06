@@ -12,18 +12,30 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import ActionSheet from "@/components/nurse/ActionSheet";
 
+type PlanItem = { text: string; risk: "ok" | "warn"; note?: string };
 const initialPlans = [
-  { id: 1, patient: "张伟 · 床位 0312", title: "高血压术后护理方案", level: "高优先级", items: ["每4小时测量血压", "低盐饮食宣教", "服药提醒(降压药×2)"] },
+  {
+    id: 1,
+    patient: "张伟 · 床位 0312",
+    title: "高血压术后护理方案",
+    level: "高优先级",
+    items: [
+      { text: "每4小时测量血压", risk: "ok", note: "符合 JNC 8 临床规范" },
+      { text: "低盐饮食宣教", risk: "ok" },
+      { text: "服药提醒(降压药×2)", risk: "warn", note: "建议补充服药时间间隔" },
+    ] as PlanItem[],
+  },
 ];
 
 const alerts = [
-  { id: 1, bed: "0312", name: "张伟", desc: "血压异常飙升 · 178/108 mmHg", level: "危急", doctor: "王主任", phone: "13800138001" },
+  { id: 1, bed: "0312", name: "张伟", desc: "血压异常飙升 · 178/108 mmHg", level: "危急" as const, doctor: "王主任", phone: "13800138001" },
 ];
 
+// priority 越小越紧急
 const todos = [
-  { level: "urgent" as const, title: "患者打卡监督", desc: "床位 0215 · 服药打卡逾期", detail: "王强(床位 0215)的降压药打卡已逾期 35 分钟,请联系患者或床旁确认。" },
-  { level: "normal" as const, title: "健康宣教推送", desc: "心内科患者 · 12 人", detail: "向心内科 12 位患者批量推送《高血压日常管理》。" },
-];
+  { level: "urgent" as const, priority: 1, title: "服药逾期提醒", desc: "床位 0215 · 王强 · 逾期 35 分钟", detail: "王强(床位 0215)的降压药打卡已逾期 35 分钟,请联系患者或床旁确认。", quickAction: "去提醒" },
+  { level: "normal" as const, priority: 2, title: "健康宣教推送", desc: "心内科患者 · 12 人", detail: "向心内科 12 位患者批量推送《高血压日常管理》。", quickAction: "去推送" },
+].sort((a, b) => a.priority - b.priority);
 
 const NurseHome = () => {
   const navigate = useNavigate();
