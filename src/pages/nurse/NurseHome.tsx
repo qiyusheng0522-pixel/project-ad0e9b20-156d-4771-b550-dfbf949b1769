@@ -123,38 +123,35 @@ const NurseHome = () => {
         </div>
       </Card>
 
-      {/* 待办数量卡片 - 按指定顺序 */}
-      <Card className="overflow-hidden shadow-soft">
-        <div className="flex items-center justify-between border-b px-4 py-3">
-          <div className="flex items-center gap-1.5">
-            <Activity className="h-4 w-4 text-primary" />
-            <h3 className="text-sm font-semibold">今日待办</h3>
-          </div>
-          <Badge variant="secondary" className="h-5">{todoItems.length} 项</Badge>
+      {/* 待办卡片网格 */}
+      <div className="flex items-center justify-between px-1 pt-1">
+        <div className="flex items-center gap-1.5">
+          <Activity className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold">今日待办</h3>
         </div>
-        <div className="divide-y">
-          {todoItems.map((t) => (
-            <button
-              key={t.key}
-              onClick={() => navigate(t.to)}
-              className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/40"
-            >
-              <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${t.bg}`}>
+        <Badge variant="secondary" className="h-5">共 {pendingTotal} 项</Badge>
+      </div>
+      <div className="grid grid-cols-2 gap-2.5">
+        {todoItems.map((t) => (
+          <button
+            key={t.key}
+            onClick={() => navigate(t.to)}
+            className="group relative flex items-center justify-between rounded-2xl border bg-card p-3.5 text-left shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-md"
+          >
+            <div className="min-w-0 flex-1">
+              <div className={`mb-2 flex h-10 w-10 items-center justify-center rounded-xl ${t.bg}`}>
                 <t.icon className={`h-5 w-5 ${t.color}`} />
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold">{t.label}</p>
-                <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{t.sub}</p>
-              </div>
-              <div className="flex shrink-0 items-baseline gap-1">
-                <span className={`text-xl font-bold ${t.color}`}>{t.count}</span>
-                <span className="text-[10px] text-muted-foreground">{t.unit}</span>
-              </div>
-              <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
-            </button>
-          ))}
-        </div>
-      </Card>
+              <p className="text-[13px] font-medium text-foreground">{t.label}</p>
+              <p className="mt-0.5 truncate text-[10px] text-muted-foreground">{t.sub}</p>
+            </div>
+            <div className="ml-2 flex shrink-0 flex-col items-end">
+              <span className={`text-2xl font-bold leading-none ${t.color}`}>{t.count}</span>
+              <span className="mt-1 text-[10px] text-muted-foreground">{t.unit}</span>
+            </div>
+          </button>
+        ))}
+      </div>
 
       {/* 紧急关注 */}
       <Card className="overflow-hidden">
