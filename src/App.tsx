@@ -12,6 +12,9 @@ import NurseTasks from "./pages/nurse/NurseTasks.tsx";
 import NurseHandover from "./pages/nurse/NurseHandover.tsx";
 import NurseEducation from "./pages/nurse/NurseEducation.tsx";
 import NurseChat from "./pages/nurse/NurseChat.tsx";
+import NurseChatList from "./pages/nurse/NurseChatList.tsx";
+import NursePlans from "./pages/nurse/NursePlans.tsx";
+import NurseProfile from "./pages/nurse/NurseProfile.tsx";
 import CommunityLayout from "./pages/community/CommunityLayout.tsx";
 import CommunityHome from "./pages/community/CommunityHome.tsx";
 import CommunityPatients from "./pages/community/CommunityPatients.tsx";
@@ -34,7 +37,10 @@ const App = () => (
             <Route path="tasks" element={<NurseTasks />} />
             <Route path="handover" element={<NurseHandover />} />
             <Route path="education" element={<NurseEducation />} />
+            <Route path="chat" element={<NurseChatList />} />
             <Route path="chat/:type/:id" element={<NurseChat />} />
+            <Route path="plans" element={<NursePlans />} />
+            <Route path="profile" element={<NurseProfile />} />
           </Route>
           <Route path="/community" element={<CommunityLayout />}>
             <Route index element={<CommunityHome />} />

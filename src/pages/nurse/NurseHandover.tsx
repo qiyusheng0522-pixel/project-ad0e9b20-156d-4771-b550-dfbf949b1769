@@ -91,11 +91,15 @@ const NurseHandover = () => {
           </div>
           <div className="space-y-3 p-4">
             <div>
-              <p className="mb-1.5 text-xs font-medium text-muted-foreground">选择接收人</p>
+              <p className="mb-1.5 text-xs font-medium text-muted-foreground">转交去向</p>
               <div className="grid grid-cols-2 gap-2">
-                {["社区护士", "家属", "转入科室", "康复中心"].map((r) => (
-                  <button key={r} className="rounded-lg border bg-card p-2.5 text-xs transition-colors hover:border-accent hover:bg-accent/5">
-                    {r}
+                {[
+                  { label: "转入社区", desc: "南京市鼓楼医院 · 内分泌科" },
+                  { label: "居家护理", desc: "由家属/居家护理协助" },
+                ].map((r) => (
+                  <button key={r.label} className="rounded-lg border bg-card p-3 text-left transition-colors hover:border-accent hover:bg-accent/5">
+                    <p className="text-xs font-semibold">{r.label}</p>
+                    <p className="mt-0.5 text-[10px] text-muted-foreground">{r.desc}</p>
                   </button>
                 ))}
               </div>

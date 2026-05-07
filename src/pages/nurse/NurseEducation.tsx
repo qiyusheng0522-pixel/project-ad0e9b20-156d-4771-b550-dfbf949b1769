@@ -31,7 +31,7 @@ const learners = [
 type Content = (typeof aiRecommended)[0] | (typeof library)[0];
 
 const NurseEducation = () => {
-  const [tab, setTab] = useState<"content" | "push" | "monitor">("content");
+  const [tab, setTab] = useState<"todo" | "content" | "push" | "monitor">("todo");
   const [contentSheet, setContentSheet] = useState<Content | null>(null);
   const [pushTargetSheet, setPushTargetSheet] = useState<{ content: Content; mode: "batch" | "single" } | null>(null);
   const [pushModeSheet, setPushModeSheet] = useState<"batch" | "single" | null>(null);
@@ -50,16 +50,17 @@ const NurseEducation = () => {
   return (
     <div className="space-y-4 p-4">
       {/* Tabs */}
-      <div className="grid grid-cols-3 gap-1 rounded-lg bg-muted p-1">
+      <div className="grid grid-cols-4 gap-1 rounded-lg bg-muted p-1">
         {[
-          { k: "content", label: "宣教内容" },
-          { k: "push", label: "宣教推送" },
-          { k: "monitor", label: "学习监控" },
+          { k: "todo", label: "待办" },
+          { k: "content", label: "内容" },
+          { k: "push", label: "推送" },
+          { k: "monitor", label: "监控" },
         ].map((t) => (
           <button
             key={t.k}
             onClick={() => setTab(t.k as any)}
-            className={`rounded-md py-1.5 text-sm font-medium transition-all ${
+            className={`rounded-md py-1.5 text-xs font-medium transition-all ${
               tab === t.k ? "bg-card shadow-soft" : "text-muted-foreground"
             }`}
           >
@@ -67,6 +68,68 @@ const NurseEducation = () => {
           </button>
         ))}
       </div>
+
+      {tab === "todo" && (
+        <>
+          <Card className="bg-gradient-card p-3 shadow-soft">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold">宣教待办</p>
+                <p className="mt-0.5 text-[11px] text-muted-foreground">按住院阶段自动推送</p>
+              </div>
+              <Badge variant="destructive" className="h-5">3 待办</Badge>
+            </div>
+          </Card>
+
+          {/* 阶段标签 */}
+          {[
+            { stage: "入院期", color: "bg-primary/10 text-primary border-primary/30", count: 1, todos: [
+              { title: "入院须知 · 单人推送", patient: "陈敏 · 床 0617", content: "《住院环境与作息介绍》", due: "今日 16:00", mode: "单人" as const },
+            ] },
+            { stage: "治疗期", color: "bg-warning/10 text-warning border-warning/30", count: 1, todos: [
+              { title: "用药安全宣教 · 多人推送", patient: "心内科 · 12 人", content: "《降压药用法与注意事项》", due: "明日 10:00", mode: "多人" as const },
+            ] },
+            { stage: "出院期", color: "bg-success/10 text-success border-success/30", count: 1, todos: [
+              { title: "居家护理指导 · 单人推送", patient: "王芳 · 床 0408", content: "《出院后饮食与复诊安排》", due: "明日 09:00", mode: "单人" as const },
+            ] },
+          ].map((s) => (
+            <Card key={s.stage} className="overflow-hidden">
+              <div className={`flex items-center justify-between border-b px-4 py-2 ${s.color.split(" ").slice(0, 2).join(" ")}`}>
+                <span className="text-xs font-semibold">{s.stage}</span>
+                <Badge variant="outline" className="h-4 border-current text-[10px]">{s.count} 项</Badge>
+              </div>
+              <div className="divide-y">
+                {s.todos.map((t, i) => (
+                  <div key={i} className="px-4 py-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium">{t.title}</p>
+                        <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{t.patient}</p>
+                        <p className="mt-1 truncate text-[11px] text-foreground/70">📖 {t.content}</p>
+                      </div>
+                      <Badge variant="secondary" className="h-4 shrink-0 text-[10px]">{t.mode}</Badge>
+                    </div>
+                    <div className="mt-2 flex items-center justify-between">
+                      <span className="text-[10px] text-muted-foreground">截止 {t.due}</span>
+                      <Button size="sm" className="h-7 bg-gradient-nurse text-xs" onClick={() => toast({ title: "已推送", description: t.title })}>
+                        <Send className="mr-1 h-3 w-3" />立即推送
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          ))}
+
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => setTab("push")}
+          >
+            <Send className="mr-2 h-4 w-4" />新建宣教推送
+          </Button>
+        </>
+      )}
 
       {tab === "content" && (
         <>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   AlertTriangle, Phone, MessageSquare, CheckCircle2, Clock, Bell,
   Users, Activity, ListChecks, Sparkles, Trash2, FileCheck2, ChevronRight, X,
-  Camera, Mic, FileText as FileTextIcon,
+  Camera, Mic, FileText as FileTextIcon, Wallet, LogOut as LogOutIcon, BookOpen,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -109,10 +109,31 @@ const NurseHome = () => {
 
   return (
     <div className="space-y-3 p-4">
-      {/* 问候卡 - 医生端同款 */}
-      <Card className="bg-gradient-card p-4 shadow-soft">
-        <h2 className="text-lg font-semibold">李护士,早上好 👋</h2>
-        <p className="mt-1 text-xs text-muted-foreground">今日有 {pendingTotal} 项待处理事项</p>
+      {/* 问候 + 收益卡 */}
+      <Card className="bg-gradient-nurse p-4 text-primary-foreground shadow-soft">
+        <div className="flex items-start justify-between">
+          <div>
+            <h2 className="text-base font-semibold">李护士,早上好 👋</h2>
+            <p className="mt-0.5 text-[11px] opacity-90">今日有 {pendingTotal} 项待处理事项</p>
+          </div>
+          <button onClick={() => navigate("/nurse/profile")} className="flex items-center gap-1 rounded-full bg-white/15 px-2 py-1 text-[10px] hover:bg-white/25">
+            <Wallet className="h-3 w-3" />收益明细
+          </button>
+        </div>
+        <div className="mt-3 grid grid-cols-3 gap-2 border-t border-white/20 pt-3">
+          <div>
+            <p className="text-[10px] opacity-80">本月收益</p>
+            <p className="mt-0.5 text-lg font-bold">¥8,640</p>
+          </div>
+          <div>
+            <p className="text-[10px] opacity-80">完成单数</p>
+            <p className="mt-0.5 text-lg font-bold">86</p>
+          </div>
+          <div>
+            <p className="text-[10px] opacity-80">待结算</p>
+            <p className="mt-0.5 text-lg font-bold">¥1,280</p>
+          </div>
+        </div>
       </Card>
 
       {/* 今日核心数据 - 医生端 2x2 大卡 */}
@@ -129,6 +150,26 @@ const NurseHome = () => {
           </button>
         ))}
       </div>
+
+      {/* 快捷入口 */}
+      <Card className="p-3 shadow-soft">
+        <div className="grid grid-cols-4 gap-1">
+          {[
+            { icon: FileCheck2, label: "方案审核", color: "text-destructive", bg: "bg-destructive/10", to: "/nurse/plans" },
+            { icon: MessageSquare, label: "沟通", color: "text-accent", bg: "bg-accent/10", to: "/nurse/chat" },
+            { icon: LogOutIcon, label: "出院转交", color: "text-primary", bg: "bg-primary/10", to: "/nurse/handover" },
+            { icon: BookOpen, label: "宣教管理", color: "text-warning", bg: "bg-warning/10", to: "/nurse/education" },
+          ].map((q) => (
+            <button key={q.label} onClick={() => navigate(q.to)} className="flex flex-col items-center gap-1 rounded-lg p-2 hover:bg-muted/40">
+              <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${q.bg}`}>
+                <q.icon className={`h-4 w-4 ${q.color}`} />
+              </div>
+              <span className="text-[11px]">{q.label}</span>
+            </button>
+          ))}
+        </div>
+      </Card>
+
 
       {/* 紧急关注 - 列表式,与医生端候诊队列一致 */}
       <Card className="overflow-hidden">
@@ -290,15 +331,7 @@ const NurseHome = () => {
         )}
       </Card>
 
-      {/* 本周护理 - 医生端 gradient 总结卡 */}
-      <Card className="bg-gradient-nurse p-4 text-primary-foreground shadow-soft">
-        <div className="flex items-center gap-2">
-          <Activity className="h-4 w-4" />
-          <span className="text-sm font-medium">本周护理工作量</span>
-        </div>
-        <p className="mt-2 text-3xl font-bold leading-none">248</p>
-        <p className="mt-1 text-[11px] opacity-80">较上周 +9% · 异常处置 12 例</p>
-      </Card>
+
 
       {/* ========== Sheets ========== */}
       <ActionSheet
