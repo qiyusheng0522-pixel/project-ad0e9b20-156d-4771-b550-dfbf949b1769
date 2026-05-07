@@ -165,35 +165,25 @@ const NurseHome = () => {
         </div>
       </Card>
 
-      {/* 今日核心数据 - 一行式卡片 */}
-      <Card className="overflow-hidden">
-        <div className="flex items-center justify-between border-b px-4 py-2">
-          <span className="text-xs font-medium text-muted-foreground">今日核心数据</span>
-          <span className="text-[10px] text-muted-foreground">↗ 较昨日</span>
-        </div>
-        <div className="grid grid-cols-4 divide-x">
-          <button onClick={() => navigate("/nurse/tasks")} className="flex flex-col items-center py-2.5 hover:bg-muted/40">
-            <Users className="h-3.5 w-3.5 text-primary" />
-            <span className="mt-1 text-base font-bold text-primary">42</span>
-            <span className="text-[10px] text-muted-foreground">院内</span>
+      {/* 今日核心数据 - 医生端样式:gradient-card + 图标方块 */}
+      <div className="grid grid-cols-2 gap-3">
+        {nurseStats.map((s) => (
+          <button key={s.label} onClick={s.onClick} className="text-left">
+            <Card className="bg-gradient-card p-3 shadow-soft transition-colors hover:bg-muted/30">
+              <div className="flex items-center justify-between">
+                <div className="min-w-0">
+                  <p className="text-[11px] text-muted-foreground">{s.label}</p>
+                  <p className="mt-0.5 text-xl font-semibold leading-tight">{s.value}</p>
+                </div>
+                <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${s.bg}`}>
+                  <s.icon className={`h-4 w-4 ${s.color}`} />
+                </div>
+              </div>
+              <p className="mt-1.5 text-[10px] text-muted-foreground">{s.sub}</p>
+            </Card>
           </button>
-          <button onClick={() => setStatSheet({ label: "院外随访", value: "86" })} className="flex flex-col items-center py-2.5 hover:bg-muted/40">
-            <Activity className="h-3.5 w-3.5 text-accent" />
-            <span className="mt-1 text-base font-bold text-accent">86</span>
-            <span className="text-[10px] text-muted-foreground">院外</span>
-          </button>
-          <button onClick={() => setStatSheet({ label: "任务完成", value: "28/35" })} className="flex flex-col items-center py-2.5 hover:bg-muted/40">
-            <ListChecks className="h-3.5 w-3.5 text-success" />
-            <span className="mt-1 text-base font-bold text-success">80%</span>
-            <span className="text-[10px] text-muted-foreground">完成率</span>
-          </button>
-          <button onClick={() => setNotifySheet(true)} className="flex flex-col items-center py-2.5 hover:bg-muted/40">
-            <Bell className="h-3.5 w-3.5 text-destructive" />
-            <span className="mt-1 text-base font-bold text-destructive">6</span>
-            <span className="text-[10px] text-muted-foreground">预警</span>
-          </button>
-        </div>
-      </Card>
+        ))}
+      </div>
 
 
       {/* 待处理 - 聚合按优先级排序 */}
