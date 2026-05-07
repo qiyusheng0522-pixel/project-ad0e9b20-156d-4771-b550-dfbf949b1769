@@ -288,6 +288,16 @@ const NurseHome = () => {
         )}
       </Card>
 
+      {/* 本周护理 - 医生端 gradient 总结卡 */}
+      <Card className="bg-gradient-nurse p-4 text-primary-foreground shadow-soft">
+        <div className="flex items-center gap-2">
+          <Activity className="h-4 w-4" />
+          <span className="text-sm font-medium">本周护理工作量</span>
+        </div>
+        <p className="mt-2 text-3xl font-bold leading-none">248</p>
+        <p className="mt-1 text-[11px] opacity-80">较上周 +9% · 异常处置 12 例</p>
+      </Card>
+
       {/* ========== Sheets ========== */}
       <ActionSheet
         open={!!alertSheet}
