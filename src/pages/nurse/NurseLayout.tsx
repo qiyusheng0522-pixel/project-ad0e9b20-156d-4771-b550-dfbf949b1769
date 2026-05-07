@@ -1,10 +1,10 @@
 import { NavLink, Outlet, Link, useLocation } from "react-router-dom";
-import { Home, MessageSquare, FileText, User as UserIcon, ClipboardCheck, ArrowLeft, Bell, Wifi, Signal, BatteryFull } from "lucide-react";
+import { Home, MessageSquare, FileText, User as UserIcon, Users, ArrowLeft, Bell, Wifi, Signal, BatteryFull } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const tabs = [
   { to: "/nurse", icon: Home, label: "工作台", end: true },
-  { to: "/nurse/tasks", icon: ClipboardCheck, label: "任务" },
+  { to: "/nurse/patients", icon: Users, label: "患者" },
   { to: "/nurse/chat", icon: MessageSquare, label: "沟通" },
   { to: "/nurse/plans", icon: FileText, label: "方案" },
   { to: "/nurse/profile", icon: UserIcon, label: "我的" },
@@ -12,7 +12,7 @@ const tabs = [
 
 const titleMap: Record<string, string> = {
   "/nurse": "工作台",
-  "/nurse/tasks": "任务监控",
+  "/nurse/patients": "患者管理",
   "/nurse/handover": "出院转交",
   "/nurse/education": "宣教管理",
   "/nurse/chat": "沟通",
