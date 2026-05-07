@@ -99,91 +99,93 @@ const NurseHome = () => {
   };
 
   const nurseStats = [
-    { label: "在管患者", value: 42, sub: "院内", icon: Users, color: "text-primary", bg: "bg-primary/10", onClick: () => navigate("/nurse/tasks") },
-    { label: "院外随访", value: 86, sub: "今日 +8", icon: Activity, color: "text-accent", bg: "bg-accent/10", onClick: () => setStatSheet({ label: "院外随访", value: "86" }) },
-    { label: "完成率", value: "80%", sub: "28/35", icon: ListChecks, color: "text-success", bg: "bg-success/10", onClick: () => setStatSheet({ label: "任务完成", value: "28/35" }) },
-    { label: "预警", value: 6, sub: "3 未读", icon: Bell, color: "text-destructive", bg: "bg-destructive/10", onClick: () => setNotifySheet(true) },
+    { label: "患者管理 · 高风险 3", value: 42, icon: Users, color: "text-primary", bg: "bg-primary/10", onClick: () => navigate("/nurse/tasks") },
+    { label: "待回复 · 条消息", value: 3, icon: MessageSquare, color: "text-success", bg: "bg-success/10", onClick: () => navigate("/nurse/chat/patient/all") },
+    { label: "风险预警 · 待处理", value: 4, icon: AlertTriangle, color: "text-warning", bg: "bg-warning/10", onClick: () => setNotifySheet(true) },
+    { label: "方案审核 · 待审核", value: plans.length, icon: FileCheck2, color: "text-destructive", bg: "bg-destructive/10", onClick: () => setStatSheet({ label: "方案审核", value: String(plans.length) }) },
   ];
 
+  const pendingTotal = nurseStats.reduce((a, b) => a + (typeof b.value === "number" ? b.value : 0), 0);
+
   return (
-    <div className="space-y-4 p-4">
-      {/* 紧急预警 - 危急强化 */}
-      <Card className="animate-critical-pulse overflow-hidden border-2 border-destructive/60 bg-destructive/5">
-        <div className="flex items-center justify-between border-b border-destructive/30 bg-destructive/15 px-4 py-2.5">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-destructive" />
-            <span className="text-sm font-semibold text-destructive">紧急预警 · 患者求助</span>
+    <div className="space-y-3 p-4">
+      {/* 问候卡 - 医生端同款 */}
+      <Card className="bg-gradient-card p-4 shadow-soft">
+        <h2 className="text-lg font-semibold">李护士,早上好 👋</h2>
+        <p className="mt-1 text-xs text-muted-foreground">今日有 {pendingTotal} 项待处理事项</p>
+      </Card>
+
+      {/* 今日核心数据 - 医生端 2x2 大卡 */}
+      <div className="grid grid-cols-2 gap-3">
+        {nurseStats.map((s) => (
+          <button key={s.label} onClick={s.onClick} className="text-left">
+            <Card className="bg-gradient-card p-4 shadow-soft transition-colors hover:bg-muted/30">
+              <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${s.bg}`}>
+                <s.icon className={`h-5 w-5 ${s.color}`} />
+              </div>
+              <p className="text-2xl font-bold leading-none">{s.value}</p>
+              <p className="mt-1.5 text-[11px] text-muted-foreground">{s.label}</p>
+            </Card>
+          </button>
+        ))}
+      </div>
+
+      {/* 紧急关注 - 列表式,与医生端候诊队列一致 */}
+      <Card className="overflow-hidden">
+        <div className="flex items-center justify-between border-b px-4 py-3">
+          <div className="flex items-center gap-1.5">
+            <Activity className="h-4 w-4 text-destructive" />
+            <h3 className="text-sm font-semibold">紧急关注</h3>
           </div>
-          <Badge variant="destructive" className="h-5 animate-pulse">{alerts.length} 危急</Badge>
+          <button onClick={() => setNotifySheet(true)} className="flex items-center text-xs text-primary">
+            查看全部 <ChevronRight className="h-3 w-3" />
+          </button>
         </div>
-        <div className="divide-y divide-destructive/15">
-          {alerts.map((a) => {
-            // 颜色分级:危急=红, 高危=橙, 预警=黄
-            const tone =
-              a.level === "危急"
-                ? { bar: "bg-destructive", badge: "bg-destructive text-destructive-foreground", text: "text-destructive" }
-                : { bar: "bg-warning", badge: "bg-warning text-warning-foreground", text: "text-warning" };
+        <div className="divide-y">
+          {alerts.map((a) => (
+            <button
+              key={a.id}
+              onClick={() => setAlertSheet(a)}
+              className="flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/40"
+            >
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-destructive/15">
+                <AlertTriangle className="h-4 w-4 text-destructive" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm font-semibold">{a.name}</span>
+                  <span className="rounded bg-destructive/15 px-1.5 py-0.5 text-[10px] font-bold text-destructive">紧急</span>
+                </div>
+                <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{a.desc}</p>
+              </div>
+              <span className="shrink-0 text-[10px] text-muted-foreground">30 分钟前</span>
+            </button>
+          ))}
+          {[
+            { name: "李娜", level: "警告", tone: "warning" as const, desc: "连续 3 天空腹血糖 > 7.0,建议调整方案", time: "2 小时前" },
+            { name: "王强", level: "提醒", tone: "primary" as const, desc: "今日血糖监测任务未完成", time: "5 小时前" },
+          ].map((n) => {
+            const dotBg = n.tone === "warning" ? "bg-warning/15" : "bg-primary/15";
+            const dotColor = n.tone === "warning" ? "text-warning" : "text-primary";
+            const tagBg = n.tone === "warning" ? "bg-warning/15 text-warning" : "bg-primary/15 text-primary";
             return (
-              <div key={a.id} className="p-3">
-                <div className="flex items-start gap-2">
-                  <span className={`mt-1 h-10 w-1 shrink-0 rounded-full ${tone.bar}`} />
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-semibold">床位 {a.bed} · {a.name}</p>
-                      <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${tone.badge}`}>{a.level}</span>
-                    </div>
-                    <p className={`mt-0.5 text-xs font-medium ${tone.text}`}>{a.desc}</p>
+              <div key={n.name} className="flex items-start gap-3 px-4 py-3">
+                <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${dotBg}`}>
+                  <AlertTriangle className={`h-4 w-4 ${dotColor}`} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm font-semibold">{n.name}</span>
+                    <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${tagBg}`}>{n.level}</span>
                   </div>
+                  <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{n.desc}</p>
                 </div>
-                {/* 处置按钮主导,医生/患者后置缩小 */}
-                <div className="mt-2.5 flex items-center gap-2">
-                  <Button
-                    size="sm"
-                    className={`h-9 flex-1 text-sm font-semibold ${a.level === "危急" ? "bg-destructive hover:bg-destructive/90" : "bg-gradient-nurse"}`}
-                    onClick={() => setAlertSheet(a)}
-                  >
-                    <CheckCircle2 className="mr-1 h-4 w-4" />立即处置
-                  </Button>
-                  <button
-                    onClick={() => navigate(`/nurse/chat/doctor/${a.id}`)}
-                    className="flex h-9 w-9 items-center justify-center rounded-md border text-muted-foreground hover:bg-muted"
-                    aria-label="联系医生"
-                  >
-                    <Phone className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => navigate(`/nurse/chat/patient/${a.id}`)}
-                    className="flex h-9 w-9 items-center justify-center rounded-md border text-muted-foreground hover:bg-muted"
-                    aria-label="联系患者"
-                  >
-                    <MessageSquare className="h-4 w-4" />
-                  </button>
-                </div>
+                <span className="shrink-0 text-[10px] text-muted-foreground">{n.time}</span>
               </div>
             );
           })}
         </div>
       </Card>
-
-      {/* 今日核心数据 - 医生端样式:gradient-card + 图标方块 */}
-      <div className="grid grid-cols-2 gap-3">
-        {nurseStats.map((s) => (
-          <button key={s.label} onClick={s.onClick} className="text-left">
-            <Card className="bg-gradient-card p-3 shadow-soft transition-colors hover:bg-muted/30">
-              <div className="flex items-center justify-between">
-                <div className="min-w-0">
-                  <p className="text-[11px] text-muted-foreground">{s.label}</p>
-                  <p className="mt-0.5 text-xl font-semibold leading-tight">{s.value}</p>
-                </div>
-                <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${s.bg}`}>
-                  <s.icon className={`h-4 w-4 ${s.color}`} />
-                </div>
-              </div>
-              <p className="mt-1.5 text-[10px] text-muted-foreground">{s.sub}</p>
-            </Card>
-          </button>
-        ))}
-      </div>
 
 
       {/* 待处理 - 聚合按优先级排序 */}
