@@ -20,6 +20,7 @@ import CommunityHome from "./pages/community/CommunityHome.tsx";
 import CommunityPatients from "./pages/community/CommunityPatients.tsx";
 import CommunityVitals from "./pages/community/CommunityVitals.tsx";
 import CommunityMessages from "./pages/community/CommunityMessages.tsx";
+import CommunityChat from "./pages/community/CommunityChat.tsx";
 
 const queryClient = new QueryClient();
 
