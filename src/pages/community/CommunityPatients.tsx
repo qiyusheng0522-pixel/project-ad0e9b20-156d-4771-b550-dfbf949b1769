@@ -151,7 +151,7 @@ const CommunityPatients = () => {
             </div>
             <div className="rounded-lg border p-3">
               <p className="font-medium flex items-center gap-1"><FileText className="h-3 w-3" />医院下转记录</p>
-              <p className="mt-1 text-muted-foreground">{detail.source === "医院下转" ? "市第一人民医院 · 出院 3 天 · 建议社区随访每周 1 次" : "社区初诊建档"}</p>
+              <p className="mt-1 text-muted-foreground">{detail.source === "医院下转" ? "南京市鼓楼医院 · 出院 3 天 · 建议社区随访每周 1 次" : "社区初诊建档"}</p>
             </div>
           </div>
         )}

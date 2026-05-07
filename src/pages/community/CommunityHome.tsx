@@ -27,7 +27,7 @@ const CommunityHome = () => {
   const [referSheet, setReferSheet] = useState(false);
 
   const handleRefer = () => {
-    toast({ title: "已上转至上级医院", description: "心内科 · 王主任已接收，预计 30 分钟内回复" });
+    toast({ title: "已上转至上级医院", description: "南京市鼓楼医院内分泌科 · 王主任已接收，预计 30 分钟内回复" });
     setReferSheet(false);
   };
 
@@ -230,7 +230,7 @@ const CommunityHome = () => {
         <div className="space-y-3 py-2 text-xs">
           <div className="rounded-lg bg-muted/40 p-3">
             <p className="font-medium">接收医院</p>
-            <p className="mt-1 text-muted-foreground">市第一人民医院 · 心内科</p>
+            <p className="mt-1 text-muted-foreground">南京市鼓楼医院 · 内分泌科</p>
           </div>
           <div className="rounded-lg bg-muted/40 p-3">
             <p className="font-medium">推送内容</p>

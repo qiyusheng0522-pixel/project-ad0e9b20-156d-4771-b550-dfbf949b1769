@@ -185,8 +185,8 @@ const CommunityVitals = () => {
       >
         <div className="space-y-3 py-2 text-xs">
           <div className="rounded-lg bg-muted/40 p-3">
-            <p className="font-medium">接收医院 · 心内科</p>
-            <p className="mt-1 text-muted-foreground">市第一人民医院 · 王主任值班</p>
+            <p className="font-medium">接收医院 · 内分泌科</p>
+            <p className="mt-1 text-muted-foreground">南京市鼓楼医院 · 内分泌科 · 王主任值班</p>
           </div>
           <div className="rounded-lg bg-muted/40 p-3">
             <p className="font-medium">推送内容</p>
