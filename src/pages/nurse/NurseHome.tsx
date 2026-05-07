@@ -98,8 +98,15 @@ const NurseHome = () => {
     setPlanAction(null);
   };
 
+  const nurseStats = [
+    { label: "在管患者", value: 42, sub: "院内", icon: Users, color: "text-primary", bg: "bg-primary/10", onClick: () => navigate("/nurse/tasks") },
+    { label: "院外随访", value: 86, sub: "今日 +8", icon: Activity, color: "text-accent", bg: "bg-accent/10", onClick: () => setStatSheet({ label: "院外随访", value: "86" }) },
+    { label: "完成率", value: "80%", sub: "28/35", icon: ListChecks, color: "text-success", bg: "bg-success/10", onClick: () => setStatSheet({ label: "任务完成", value: "28/35" }) },
+    { label: "预警", value: 6, sub: "3 未读", icon: Bell, color: "text-destructive", bg: "bg-destructive/10", onClick: () => setNotifySheet(true) },
+  ];
+
   return (
-    <div className="space-y-3 p-3">
+    <div className="space-y-4 p-4">
       {/* 紧急预警 - 危急强化 */}
       <Card className="animate-critical-pulse overflow-hidden border-2 border-destructive/60 bg-destructive/5">
         <div className="flex items-center justify-between border-b border-destructive/30 bg-destructive/15 px-4 py-2.5">
@@ -158,35 +165,25 @@ const NurseHome = () => {
         </div>
       </Card>
 
-      {/* 今日核心数据 - 一行式卡片 */}
-      <Card className="overflow-hidden">
-        <div className="flex items-center justify-between border-b px-4 py-2">
-          <span className="text-xs font-medium text-muted-foreground">今日核心数据</span>
-          <span className="text-[10px] text-muted-foreground">↗ 较昨日</span>
-        </div>
-        <div className="grid grid-cols-4 divide-x">
-          <button onClick={() => navigate("/nurse/tasks")} className="flex flex-col items-center py-2.5 hover:bg-muted/40">
-            <Users className="h-3.5 w-3.5 text-primary" />
-            <span className="mt-1 text-base font-bold text-primary">42</span>
-            <span className="text-[10px] text-muted-foreground">院内</span>
+      {/* 今日核心数据 - 医生端样式:gradient-card + 图标方块 */}
+      <div className="grid grid-cols-2 gap-3">
+        {nurseStats.map((s) => (
+          <button key={s.label} onClick={s.onClick} className="text-left">
+            <Card className="bg-gradient-card p-3 shadow-soft transition-colors hover:bg-muted/30">
+              <div className="flex items-center justify-between">
+                <div className="min-w-0">
+                  <p className="text-[11px] text-muted-foreground">{s.label}</p>
+                  <p className="mt-0.5 text-xl font-semibold leading-tight">{s.value}</p>
+                </div>
+                <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${s.bg}`}>
+                  <s.icon className={`h-4 w-4 ${s.color}`} />
+                </div>
+              </div>
+              <p className="mt-1.5 text-[10px] text-muted-foreground">{s.sub}</p>
+            </Card>
           </button>
-          <button onClick={() => setStatSheet({ label: "院外随访", value: "86" })} className="flex flex-col items-center py-2.5 hover:bg-muted/40">
-            <Activity className="h-3.5 w-3.5 text-accent" />
-            <span className="mt-1 text-base font-bold text-accent">86</span>
-            <span className="text-[10px] text-muted-foreground">院外</span>
-          </button>
-          <button onClick={() => setStatSheet({ label: "任务完成", value: "28/35" })} className="flex flex-col items-center py-2.5 hover:bg-muted/40">
-            <ListChecks className="h-3.5 w-3.5 text-success" />
-            <span className="mt-1 text-base font-bold text-success">80%</span>
-            <span className="text-[10px] text-muted-foreground">完成率</span>
-          </button>
-          <button onClick={() => setNotifySheet(true)} className="flex flex-col items-center py-2.5 hover:bg-muted/40">
-            <Bell className="h-3.5 w-3.5 text-destructive" />
-            <span className="mt-1 text-base font-bold text-destructive">6</span>
-            <span className="text-[10px] text-muted-foreground">预警</span>
-          </button>
-        </div>
-      </Card>
+        ))}
+      </div>
 
 
       {/* 待处理 - 聚合按优先级排序 */}
@@ -289,6 +286,16 @@ const NurseHome = () => {
             ))}
           </div>
         )}
+      </Card>
+
+      {/* 本周护理 - 医生端 gradient 总结卡 */}
+      <Card className="bg-gradient-nurse p-4 text-primary-foreground shadow-soft">
+        <div className="flex items-center gap-2">
+          <Activity className="h-4 w-4" />
+          <span className="text-sm font-medium">本周护理工作量</span>
+        </div>
+        <p className="mt-2 text-3xl font-bold leading-none">248</p>
+        <p className="mt-1 text-[11px] opacity-80">较上周 +9% · 异常处置 12 例</p>
       </Card>
 
       {/* ========== Sheets ========== */}

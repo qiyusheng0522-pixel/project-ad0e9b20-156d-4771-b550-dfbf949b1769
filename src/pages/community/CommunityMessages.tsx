@@ -17,10 +17,10 @@ type Msg = {
 };
 
 const initial: Msg[] = [
-  { id: 1, type: "new-patient", title: "收到新患者", desc: "市第一人民医院下转 张伟,请及时建档随访", time: "刚刚", unread: true },
+  { id: 1, type: "new-patient", title: "收到新患者", desc: "南京市鼓楼医院下转 张伟,请及时建档随访", time: "刚刚", unread: true },
   { id: 2, type: "alert", title: "异常值预警", desc: "李建国 空腹血糖 12.8 mmol/L,请立即处置", time: "10 分钟前", unread: true },
-  { id: 3, type: "refer-result", title: "上转结果反馈", desc: "王建军 已被心内科接收,预约明日 9:00 门诊", time: "1 小时前", unread: true },
-  { id: 4, type: "new-patient", title: "收到新患者", desc: "市第一人民医院下转 陈敏,心律失常观察", time: "2 小时前", unread: true },
+  { id: 3, type: "refer-result", title: "上转结果反馈", desc: "王建军 已被南京市鼓楼医院内分泌科接收,预约明日 9:00 门诊", time: "1 小时前", unread: true },
+  { id: 4, type: "new-patient", title: "收到新患者", desc: "南京市鼓楼医院下转 陈敏,心律失常观察", time: "2 小时前", unread: true },
   { id: 5, type: "system", title: "随访提醒", desc: "今日有 3 位患者待随访", time: "今早 8:00", unread: false },
 ];
 
@@ -119,7 +119,7 @@ const CommunityMessages = () => {
               <div className="rounded-lg border p-3">
                 <p className="font-medium">医院反馈详情</p>
                 <ul className="mt-1 space-y-1 text-muted-foreground">
-                  <li>· 接收科室:心内科</li>
+                  <li>· 接收科室:内分泌科</li>
                   <li>· 接诊医生:王主任</li>
                   <li>· 预约时间:明日 09:00</li>
                   <li>· 备注:请携带近 7 日数据记录</li>
