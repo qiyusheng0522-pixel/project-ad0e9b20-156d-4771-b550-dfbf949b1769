@@ -119,7 +119,7 @@ const CommunityMessages = () => {
               <div className="rounded-lg border p-3">
                 <p className="font-medium">医院反馈详情</p>
                 <ul className="mt-1 space-y-1 text-muted-foreground">
-                  <li>· 接收科室:心内科</li>
+                  <li>· 接收科室:内分泌科</li>
                   <li>· 接诊医生:王主任</li>
                   <li>· 预约时间:明日 09:00</li>
                   <li>· 备注:请携带近 7 日数据记录</li>

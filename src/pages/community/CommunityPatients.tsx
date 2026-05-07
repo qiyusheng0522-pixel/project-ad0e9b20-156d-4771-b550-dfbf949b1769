@@ -23,7 +23,7 @@ const patients: Patient[] = [
   { id: 1, name: "张伟", age: 58, gender: "男", tags: ["高血压III级", "术后"], source: "医院下转", isNew: true, lastVisit: "今日下转" },
   { id: 2, name: "李建国", age: 62, gender: "男", tags: ["糖尿病", "异常↑"], source: "社区建档", abnormal: true, lastVisit: "1 小时前" },
   { id: 3, name: "刘秀英", age: 67, gender: "女", tags: ["高血压"], source: "社区建档", lastVisit: "3 天前" },
-  { id: 4, name: "陈敏", age: 55, gender: "女", tags: ["心律失常"], source: "医院下转", isNew: true, lastVisit: "今日下转" },
+  { id: 4, name: "陈敏", age: 55, gender: "女", tags: ["糖尿病II型"], source: "医院下转", isNew: true, lastVisit: "今日下转" },
 ];
 
 const tabs = [
