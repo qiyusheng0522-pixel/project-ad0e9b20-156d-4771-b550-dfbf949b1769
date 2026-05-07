@@ -98,8 +98,15 @@ const NurseHome = () => {
     setPlanAction(null);
   };
 
+  const nurseStats = [
+    { label: "在管患者", value: 42, sub: "院内", icon: Users, color: "text-primary", bg: "bg-primary/10", onClick: () => navigate("/nurse/tasks") },
+    { label: "院外随访", value: 86, sub: "今日 +8", icon: Activity, color: "text-accent", bg: "bg-accent/10", onClick: () => setStatSheet({ label: "院外随访", value: "86" }) },
+    { label: "完成率", value: "80%", sub: "28/35", icon: ListChecks, color: "text-success", bg: "bg-success/10", onClick: () => setStatSheet({ label: "任务完成", value: "28/35" }) },
+    { label: "预警", value: 6, sub: "3 未读", icon: Bell, color: "text-destructive", bg: "bg-destructive/10", onClick: () => setNotifySheet(true) },
+  ];
+
   return (
-    <div className="space-y-3 p-3">
+    <div className="space-y-4 p-4">
       {/* 紧急预警 - 危急强化 */}
       <Card className="animate-critical-pulse overflow-hidden border-2 border-destructive/60 bg-destructive/5">
         <div className="flex items-center justify-between border-b border-destructive/30 bg-destructive/15 px-4 py-2.5">
