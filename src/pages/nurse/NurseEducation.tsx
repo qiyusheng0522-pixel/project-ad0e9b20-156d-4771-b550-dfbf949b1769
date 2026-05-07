@@ -31,7 +31,7 @@ const learners = [
 type Content = (typeof aiRecommended)[0] | (typeof library)[0];
 
 const NurseEducation = () => {
-  const [tab, setTab] = useState<"content" | "push" | "monitor">("content");
+  const [tab, setTab] = useState<"todo" | "content" | "push" | "monitor">("todo");
   const [contentSheet, setContentSheet] = useState<Content | null>(null);
   const [pushTargetSheet, setPushTargetSheet] = useState<{ content: Content; mode: "batch" | "single" } | null>(null);
   const [pushModeSheet, setPushModeSheet] = useState<"batch" | "single" | null>(null);
