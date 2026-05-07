@@ -20,6 +20,7 @@ import CommunityHome from "./pages/community/CommunityHome.tsx";
 import CommunityPatients from "./pages/community/CommunityPatients.tsx";
 import CommunityVitals from "./pages/community/CommunityVitals.tsx";
 import CommunityMessages from "./pages/community/CommunityMessages.tsx";
+import CommunityChat from "./pages/community/CommunityChat.tsx";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
             <Route path="patients" element={<CommunityPatients />} />
             <Route path="vitals" element={<CommunityVitals />} />
             <Route path="messages" element={<CommunityMessages />} />
+            <Route path="chat/:type/:id" element={<CommunityChat />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
