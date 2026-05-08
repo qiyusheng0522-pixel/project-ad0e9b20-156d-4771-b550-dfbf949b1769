@@ -61,7 +61,6 @@ const NursePatients = () => {
   const [params] = useSearchParams();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string>(params.get("filter") || "全部");
-  const [filterSheet, setFilterSheet] = useState(false);
   const [selected, setSelected] = useState<Patient | null>(null);
   const [summaryDraft, setSummaryDraft] = useState("");
   const [savedSummary, setSavedSummary] = useState<Record<number, { date: string; text: string }>>({});
@@ -71,12 +70,14 @@ const NursePatients = () => {
       allPatients
         .filter((p) => {
           const ms = !search || p.name.includes(search) || p.bed.includes(search);
-          const mf = filter === "全部" || p.status === filter;
+          const mf = filter === "全部" || p.stage === filter;
           return ms && mf;
         })
         .sort((a, b) => Number(b.abnormal) - Number(a.abnormal)),
     [search, filter]
   );
+
+  const stageCount = (s: Stage) => allPatients.filter((p) => p.stage === s).length;
 
   const openPatient = (p: Patient) => {
     setSelected(p);
@@ -101,42 +102,37 @@ const NursePatients = () => {
 
   return (
     <div className="space-y-3 p-4">
-      {/* 顶部统计 */}
-      <div className="grid grid-cols-3 gap-2">
-        {[
-          { label: "在管", value: allPatients.length, color: "text-primary", bg: "bg-primary/10" },
-          { label: "异常", value: allPatients.filter((p) => p.abnormal).length, color: "text-destructive", bg: "bg-destructive/10" },
-          { label: "待处理", value: allPatients.filter((p) => p.status === "待处理").length, color: "text-warning", bg: "bg-warning/10" },
-        ].map((s) => (
-          <Card key={s.label} className="p-3 text-center shadow-soft">
-            <div className={`mx-auto flex h-8 w-8 items-center justify-center rounded-lg ${s.bg}`}>
-              <Activity className={`h-4 w-4 ${s.color}`} />
-            </div>
-            <p className="mt-2 text-xl font-bold">{s.value}</p>
-            <p className="text-[11px] text-muted-foreground">{s.label}</p>
-          </Card>
-        ))}
+      {/* 搜索 */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          placeholder="搜索患者姓名/床位"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="h-9 pl-8 text-sm"
+        />
       </div>
 
-      {/* 搜索 + 筛选 */}
-      <div className="flex gap-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="搜索患者姓名/床位"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="h-9 pl-8 text-sm"
-          />
-        </div>
-        <Button
-          variant={filter !== "全部" ? "default" : "outline"}
-          size="icon"
-          className="h-9 w-9 shrink-0"
-          onClick={() => setFilterSheet(true)}
-        >
-          <Filter className="h-4 w-4" />
-        </Button>
+      {/* 状态 Tabs */}
+      <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1">
+        {stageTabs.map((t) => {
+          const active = filter === t;
+          const count = t === "全部" ? allPatients.length : stageCount(t);
+          return (
+            <button
+              key={t}
+              onClick={() => setFilter(t)}
+              className={`flex shrink-0 items-center gap-1 rounded-full border px-3 py-1.5 text-xs transition-colors ${
+                active ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"
+              }`}
+            >
+              {t}
+              <span className={`rounded-full px-1.5 text-[10px] ${active ? "bg-white/20" : "bg-muted text-muted-foreground"}`}>
+                {count}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* 患者列表 */}
@@ -154,12 +150,14 @@ const NursePatients = () => {
               className={`flex w-full items-start gap-3 px-4 py-3 text-left transition-colors ${p.abnormal ? "bg-destructive/5 hover:bg-destructive/10" : "hover:bg-muted/40"}`}
             >
               <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-xs font-semibold ${p.abnormal ? "bg-destructive/15 text-destructive" : "bg-primary/10 text-primary"}`}>
-                {p.bed}
+                {p.bed === "—" ? p.name[0] : p.bed}
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
                   <span className="text-sm font-semibold">{p.name}</span>
                   <span className="text-[10px] text-muted-foreground">{p.age}岁 · {p.gender}</span>
+                  <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-medium text-primary">{p.condition}</span>
+                  <span className="rounded bg-muted px-1.5 py-0.5 text-[9px] text-muted-foreground">{p.stage}</span>
                   {p.abnormal && <Badge variant="destructive" className="h-4 px-1 text-[9px]">异常</Badge>}
                   {savedSummary[p.id] && <Badge variant="outline" className="h-4 border-success px-1 text-[9px] text-success">已小结</Badge>}
                 </div>
@@ -176,33 +174,6 @@ const NursePatients = () => {
           ))}
         </div>
       </Card>
-
-      {/* 筛选 Sheet */}
-      <ActionSheet
-        open={filterSheet}
-        onOpenChange={setFilterSheet}
-        title="筛选患者"
-        footer={
-          <div className="grid grid-cols-2 gap-2">
-            <Button variant="outline" onClick={() => { setFilter("全部"); setFilterSheet(false); }}>重置</Button>
-            <Button className="bg-gradient-nurse" onClick={() => setFilterSheet(false)}>应用</Button>
-          </div>
-        }
-      >
-        <div className="grid grid-cols-2 gap-2 py-2">
-          {filterTabs.map((t) => (
-            <button
-              key={t}
-              onClick={() => setFilter(t)}
-              className={`rounded-lg border p-3 text-sm transition-colors ${
-                filter === t ? "border-accent bg-accent/10 font-medium text-accent" : "border-border hover:bg-muted/50"
-              }`}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
-      </ActionSheet>
 
       {/* 患者详情 */}
       <ActionSheet
