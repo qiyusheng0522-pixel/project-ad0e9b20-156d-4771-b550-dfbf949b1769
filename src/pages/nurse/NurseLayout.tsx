@@ -6,7 +6,6 @@ const tabs = [
   { to: "/nurse", icon: Home, label: "工作台", end: true },
   { to: "/nurse/patients", icon: Users, label: "患者" },
   { to: "/nurse/chat", icon: MessageSquare, label: "沟通" },
-  { to: "/nurse/plans", icon: FileText, label: "方案" },
   { to: "/nurse/profile", icon: UserIcon, label: "我的" },
 ];
 
@@ -68,7 +67,7 @@ const NurseLayout = () => {
 
             {!isFullscreenChild && (
               <nav className="absolute bottom-0 left-0 right-0 z-40 border-t bg-card/95 backdrop-blur-md">
-                <div className="grid grid-cols-5">
+                <div className="grid grid-cols-4">
                   {tabs.map((t) => (
                     <NavLink
                       key={t.to}
