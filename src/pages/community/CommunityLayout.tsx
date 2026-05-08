@@ -1,17 +1,26 @@
 import { NavLink, Outlet, Link, useLocation } from "react-router-dom";
-import { Home, Users, Activity, Bell, ArrowLeft, Stethoscope, Wifi, Signal, BatteryFull } from "lucide-react";
+import { Home, Users, BookOpen, MessageSquare, ArrowLeft, Bell, Wifi, Signal, BatteryFull } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const tabs = [
   { to: "/community", icon: Home, label: "工作台", end: true },
   { to: "/community/patients", icon: Users, label: "患者档案" },
-  { to: "/community/vitals", icon: Activity, label: "数据录入" },
-  { to: "/community/messages", icon: Bell, label: "消息" },
+  { to: "/community/education", icon: BookOpen, label: "宣教" },
+  { to: "/community/messages", icon: MessageSquare, label: "沟通" },
 ];
+
+const titleMap: Record<string, string> = {
+  "/community": "工作台",
+  "/community/patients": "患者档案",
+  "/community/education": "宣教管理",
+  "/community/messages": "沟通",
+  "/community/refer": "上转鼓楼医院",
+};
 
 const CommunityLayout = () => {
   const location = useLocation();
   const isFullscreenChild = location.pathname.startsWith("/community/chat");
+  const title = titleMap[location.pathname] ?? "工作台";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-200 to-slate-100 px-4 py-6 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900">
@@ -30,26 +39,23 @@ const CommunityLayout = () => {
             </div>
 
             {!isFullscreenChild && (
-              <header className="sticky top-0 z-30 flex items-center justify-between bg-gradient-community px-4 py-3 text-primary-foreground">
-                <div className="flex items-center gap-2">
-                  <Link to="/" className="rounded p-1 hover:bg-white/10">
-                    <ArrowLeft className="h-5 w-5" />
-                  </Link>
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/20">
-                    <Stethoscope className="h-4 w-4" />
-                  </div>
-                  <div className="leading-tight">
-                    <p className="text-sm font-semibold">社区卫生站</p>
-                    <p className="text-[11px] opacity-80">朝阳社区 · 张医生</p>
+              <header className="sticky top-0 z-30 flex items-center justify-between border-b bg-card px-4 py-3">
+                <Link to="/" className="rounded-md p-1 text-muted-foreground hover:bg-muted">
+                  <ArrowLeft className="h-4 w-4" />
+                </Link>
+                <h1 className="text-base font-semibold">{title}</h1>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => toast({ title: "您有 4 条新消息", description: "请前往沟通查看" })}
+                    className="relative rounded-full p-1.5 text-muted-foreground hover:bg-muted"
+                  >
+                    <Bell className="h-4 w-4" />
+                    <span className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-destructive" />
+                  </button>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-community text-xs font-semibold text-primary-foreground">
+                    张
                   </div>
                 </div>
-                <button
-                  onClick={() => toast({ title: "您有 4 条新消息", description: "请前往消息中心查看" })}
-                  className="relative rounded-full p-1.5 hover:bg-white/10"
-                >
-                  <Bell className="h-5 w-5" />
-                  <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-warning" />
-                </button>
               </header>
             )}
 
@@ -66,7 +72,7 @@ const CommunityLayout = () => {
                       to={t.to}
                       end={t.end}
                       className={({ isActive }) =>
-                        `flex flex-col items-center justify-center gap-0.5 py-2.5 text-[11px] transition-colors ${
+                        `flex flex-col items-center justify-center gap-0.5 py-2.5 text-[10px] transition-colors ${
                           isActive ? "text-accent" : "text-muted-foreground hover:text-foreground"
                         }`
                       }

@@ -18,7 +18,7 @@ import NurseProfile from "./pages/nurse/NurseProfile.tsx";
 import CommunityLayout from "./pages/community/CommunityLayout.tsx";
 import CommunityHome from "./pages/community/CommunityHome.tsx";
 import CommunityPatients from "./pages/community/CommunityPatients.tsx";
-import CommunityVitals from "./pages/community/CommunityVitals.tsx";
+import CommunityEducation from "./pages/community/CommunityEducation.tsx";
 import CommunityMessages from "./pages/community/CommunityMessages.tsx";
 import CommunityChat from "./pages/community/CommunityChat.tsx";
 
@@ -46,7 +46,7 @@ const App = () => (
           <Route path="/community" element={<CommunityLayout />}>
             <Route index element={<CommunityHome />} />
             <Route path="patients" element={<CommunityPatients />} />
-            <Route path="vitals" element={<CommunityVitals />} />
+            <Route path="education" element={<CommunityEducation />} />
             <Route path="messages" element={<CommunityMessages />} />
             <Route path="chat/:type/:id" element={<CommunityChat />} />
           </Route>

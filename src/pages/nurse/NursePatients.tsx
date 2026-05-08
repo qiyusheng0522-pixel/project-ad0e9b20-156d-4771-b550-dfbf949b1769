@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import ActionSheet from "@/components/nurse/ActionSheet";
 
+type Stage = "待入院" | "院中" | "待出院" | "历史";
 type Patient = {
   id: number;
   name: string;
@@ -19,9 +20,10 @@ type Patient = {
   age: number;
   gender: "男" | "女";
   diagnosis: string;
+  condition: string; // 病症
+  stage: Stage;
   allergy: string;
   doctor: string;
-  status: "异常" | "正常" | "待处理";
   abnormal: boolean;
   metric: { label: string; value: string; unit: string };
   hba1c: string;
@@ -29,37 +31,36 @@ type Patient = {
 };
 
 const allPatients: Patient[] = [
-  { id: 1, name: "张伟", bed: "0312", age: 58, gender: "男", diagnosis: "2 型糖尿病 · 酮症倾向", allergy: "青霉素", doctor: "王主任", status: "异常", abnormal: true,
+  { id: 1, name: "张伟", bed: "0312", age: 58, gender: "男", diagnosis: "2 型糖尿病 · 酮症倾向", condition: "糖尿病", stage: "院中", allergy: "青霉素", doctor: "王主任", abnormal: true,
     metric: { label: "随机血糖", value: "16.8", unit: "mmol/L" }, hba1c: "9.2%",
     meds: [{ name: "门冬胰岛素", dose: "8U 三餐前皮下" }, { name: "二甲双胍", dose: "0.5g 每日 3 次" }] },
-  { id: 2, name: "李娜", bed: "0508", age: 45, gender: "女", diagnosis: "2 型糖尿病 · 周围神经病变", allergy: "无", doctor: "李医生", status: "异常", abnormal: true,
+  { id: 2, name: "李娜", bed: "0508", age: 45, gender: "女", diagnosis: "2 型糖尿病 · 周围神经病变", condition: "糖尿病", stage: "院中", allergy: "无", doctor: "李医生", abnormal: true,
     metric: { label: "空腹血糖", value: "9.6", unit: "mmol/L" }, hba1c: "8.4%",
     meds: [{ name: "甘精胰岛素", dose: "16U 睡前" }, { name: "甲钴胺", dose: "0.5mg 每日 3 次" }] },
-  { id: 3, name: "王强", bed: "0215", age: 42, gender: "男", diagnosis: "Graves 病 · 甲状腺功能亢进", allergy: "无", doctor: "王主任", status: "异常", abnormal: true,
+  { id: 3, name: "王强", bed: "0215", age: 42, gender: "男", diagnosis: "Graves 病 · 甲状腺功能亢进", condition: "甲亢", stage: "院中", allergy: "无", doctor: "王主任", abnormal: true,
     metric: { label: "心率", value: "128", unit: "bpm" }, hba1c: "—",
     meds: [{ name: "甲巯咪唑", dose: "10mg 每日 3 次" }, { name: "美托洛尔", dose: "25mg 每日 2 次" }] },
-  { id: 4, name: "陈敏", bed: "0617", age: 51, gender: "女", diagnosis: "1 型糖尿病", allergy: "海鲜", doctor: "张医生", status: "正常", abnormal: false,
+  { id: 4, name: "陈敏", bed: "0617", age: 51, gender: "女", diagnosis: "1 型糖尿病", condition: "糖尿病", stage: "待出院", allergy: "海鲜", doctor: "张医生", abnormal: false,
     metric: { label: "空腹血糖", value: "6.2", unit: "mmol/L" }, hba1c: "6.8%",
     meds: [{ name: "门冬胰岛素", dose: "6U 三餐前" }, { name: "地特胰岛素", dose: "12U 睡前" }] },
-  { id: 5, name: "赵磊", bed: "0419", age: 48, gender: "男", diagnosis: "桥本甲状腺炎 · 甲减", allergy: "无", doctor: "李医生", status: "正常", abnormal: false,
+  { id: 5, name: "赵磊", bed: "—", age: 48, gender: "男", diagnosis: "桥本甲状腺炎 · 甲减", condition: "甲减", stage: "待入院", allergy: "无", doctor: "李医生", abnormal: false,
     metric: { label: "TSH", value: "5.8", unit: "mIU/L" }, hba1c: "—",
     meds: [{ name: "左甲状腺素钠", dose: "75μg 早餐前" }] },
-  { id: 6, name: "周婷", bed: "0305", age: 39, gender: "女", diagnosis: "妊娠糖尿病", allergy: "无", doctor: "张医生", status: "待处理", abnormal: false,
+  { id: 6, name: "周婷", bed: "0305", age: 39, gender: "女", diagnosis: "妊娠糖尿病", condition: "糖尿病", stage: "院中", allergy: "无", doctor: "张医生", abnormal: false,
     metric: { label: "餐后 2h", value: "8.4", unit: "mmol/L" }, hba1c: "6.2%",
     meds: [{ name: "门冬胰岛素", dose: "4U 三餐前" }] },
-  { id: 7, name: "刘洋", bed: "0612", age: 36, gender: "男", diagnosis: "库欣综合征 · 继发性高血压", allergy: "无", doctor: "王主任", status: "正常", abnormal: false,
+  { id: 7, name: "刘洋", bed: "—", age: 36, gender: "男", diagnosis: "库欣综合征 · 继发性高血压", condition: "库欣综合征", stage: "历史", allergy: "无", doctor: "王主任", abnormal: false,
     metric: { label: "血压", value: "138/86", unit: "mmHg" }, hba1c: "5.9%",
     meds: [{ name: "螺内酯", dose: "20mg 每日 2 次" }] },
 ];
 
-const filterTabs = ["全部", "异常", "正常", "待处理"] as const;
+const stageTabs: ("全部" | Stage)[] = ["全部", "待入院", "院中", "待出院", "历史"];
 
 const NursePatients = () => {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string>(params.get("filter") || "全部");
-  const [filterSheet, setFilterSheet] = useState(false);
   const [selected, setSelected] = useState<Patient | null>(null);
   const [summaryDraft, setSummaryDraft] = useState("");
   const [savedSummary, setSavedSummary] = useState<Record<number, { date: string; text: string }>>({});
@@ -69,12 +70,14 @@ const NursePatients = () => {
       allPatients
         .filter((p) => {
           const ms = !search || p.name.includes(search) || p.bed.includes(search);
-          const mf = filter === "全部" || p.status === filter;
+          const mf = filter === "全部" || p.stage === filter;
           return ms && mf;
         })
         .sort((a, b) => Number(b.abnormal) - Number(a.abnormal)),
     [search, filter]
   );
+
+  const stageCount = (s: Stage) => allPatients.filter((p) => p.stage === s).length;
 
   const openPatient = (p: Patient) => {
     setSelected(p);
@@ -99,42 +102,37 @@ const NursePatients = () => {
 
   return (
     <div className="space-y-3 p-4">
-      {/* 顶部统计 */}
-      <div className="grid grid-cols-3 gap-2">
-        {[
-          { label: "在管", value: allPatients.length, color: "text-primary", bg: "bg-primary/10" },
-          { label: "异常", value: allPatients.filter((p) => p.abnormal).length, color: "text-destructive", bg: "bg-destructive/10" },
-          { label: "待处理", value: allPatients.filter((p) => p.status === "待处理").length, color: "text-warning", bg: "bg-warning/10" },
-        ].map((s) => (
-          <Card key={s.label} className="p-3 text-center shadow-soft">
-            <div className={`mx-auto flex h-8 w-8 items-center justify-center rounded-lg ${s.bg}`}>
-              <Activity className={`h-4 w-4 ${s.color}`} />
-            </div>
-            <p className="mt-2 text-xl font-bold">{s.value}</p>
-            <p className="text-[11px] text-muted-foreground">{s.label}</p>
-          </Card>
-        ))}
+      {/* 搜索 */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          placeholder="搜索患者姓名/床位"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="h-9 pl-8 text-sm"
+        />
       </div>
 
-      {/* 搜索 + 筛选 */}
-      <div className="flex gap-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="搜索患者姓名/床位"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="h-9 pl-8 text-sm"
-          />
-        </div>
-        <Button
-          variant={filter !== "全部" ? "default" : "outline"}
-          size="icon"
-          className="h-9 w-9 shrink-0"
-          onClick={() => setFilterSheet(true)}
-        >
-          <Filter className="h-4 w-4" />
-        </Button>
+      {/* 状态 Tabs */}
+      <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1">
+        {stageTabs.map((t) => {
+          const active = filter === t;
+          const count = t === "全部" ? allPatients.length : stageCount(t);
+          return (
+            <button
+              key={t}
+              onClick={() => setFilter(t)}
+              className={`flex shrink-0 items-center gap-1 rounded-full border px-3 py-1.5 text-xs transition-colors ${
+                active ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"
+              }`}
+            >
+              {t}
+              <span className={`rounded-full px-1.5 text-[10px] ${active ? "bg-white/20" : "bg-muted text-muted-foreground"}`}>
+                {count}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* 患者列表 */}
@@ -152,12 +150,14 @@ const NursePatients = () => {
               className={`flex w-full items-start gap-3 px-4 py-3 text-left transition-colors ${p.abnormal ? "bg-destructive/5 hover:bg-destructive/10" : "hover:bg-muted/40"}`}
             >
               <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-xs font-semibold ${p.abnormal ? "bg-destructive/15 text-destructive" : "bg-primary/10 text-primary"}`}>
-                {p.bed}
+                {p.bed === "—" ? p.name[0] : p.bed}
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
                   <span className="text-sm font-semibold">{p.name}</span>
                   <span className="text-[10px] text-muted-foreground">{p.age}岁 · {p.gender}</span>
+                  <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-medium text-primary">{p.condition}</span>
+                  <span className="rounded bg-muted px-1.5 py-0.5 text-[9px] text-muted-foreground">{p.stage}</span>
                   {p.abnormal && <Badge variant="destructive" className="h-4 px-1 text-[9px]">异常</Badge>}
                   {savedSummary[p.id] && <Badge variant="outline" className="h-4 border-success px-1 text-[9px] text-success">已小结</Badge>}
                 </div>
@@ -174,33 +174,6 @@ const NursePatients = () => {
           ))}
         </div>
       </Card>
-
-      {/* 筛选 Sheet */}
-      <ActionSheet
-        open={filterSheet}
-        onOpenChange={setFilterSheet}
-        title="筛选患者"
-        footer={
-          <div className="grid grid-cols-2 gap-2">
-            <Button variant="outline" onClick={() => { setFilter("全部"); setFilterSheet(false); }}>重置</Button>
-            <Button className="bg-gradient-nurse" onClick={() => setFilterSheet(false)}>应用</Button>
-          </div>
-        }
-      >
-        <div className="grid grid-cols-2 gap-2 py-2">
-          {filterTabs.map((t) => (
-            <button
-              key={t}
-              onClick={() => setFilter(t)}
-              className={`rounded-lg border p-3 text-sm transition-colors ${
-                filter === t ? "border-accent bg-accent/10 font-medium text-accent" : "border-border hover:bg-muted/50"
-              }`}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
-      </ActionSheet>
 
       {/* 患者详情 */}
       <ActionSheet
