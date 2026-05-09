@@ -99,23 +99,19 @@ const NursePatients = () => {
         />
       </div>
 
-      {/* 状态 Tabs */}
-      <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1">
-        {stageTabs.map((t) => {
-          const active = filter === t;
-          const count = t === "全部" ? allPatients.length : stageCount(t);
+      {/* 病症筛选 */}
+      <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1">
+        {conditions.map((c) => {
+          const active = conditionFilter === c;
           return (
             <button
-              key={t}
-              onClick={() => setFilter(t)}
-              className={`flex shrink-0 items-center gap-1 rounded-full border px-3 py-1.5 text-xs transition-colors ${
-                active ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"
+              key={c}
+              onClick={() => setConditionFilter(c)}
+              className={`shrink-0 rounded-full border px-3 py-1 text-[11px] transition-colors ${
+                active ? "border-primary bg-primary/10 text-primary" : "border-border bg-card text-muted-foreground"
               }`}
             >
-              {t}
-              <span className={`rounded-full px-1.5 text-[10px] ${active ? "bg-white/20" : "bg-muted text-muted-foreground"}`}>
-                {count}
-              </span>
+              {c}
             </button>
           );
         })}
@@ -133,29 +129,41 @@ const NursePatients = () => {
             <button
               key={p.id}
               onClick={() => openPatient(p)}
-              className={`flex w-full items-start gap-3 px-4 py-3 text-left transition-colors ${p.abnormal ? "bg-destructive/5 hover:bg-destructive/10" : "hover:bg-muted/40"}`}
+              className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/40"
             >
-              <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-xs font-semibold ${p.abnormal ? "bg-destructive/15 text-destructive" : "bg-primary/10 text-primary"}`}>
-                {p.bed === "—" ? p.name[0] : p.bed}
+              {/* 头像 */}
+              <div className="relative shrink-0">
+                <div className={`flex h-12 w-12 items-center justify-center rounded-full text-base font-semibold ${p.abnormal ? "bg-destructive/15 text-destructive" : "bg-primary/10 text-primary"}`}>
+                  {p.name[0]}
+                </div>
+                <div className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-warning text-[8px] text-white">
+                  <UsersIcon className="h-2.5 w-2.5" />
+                </div>
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
                   <span className="text-sm font-semibold">{p.name}</span>
-                  <span className="text-[10px] text-muted-foreground">{p.age}岁 · {p.gender}</span>
-                  <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-medium text-primary">{p.condition}</span>
-                  <span className="rounded bg-muted px-1.5 py-0.5 text-[9px] text-muted-foreground">{p.stage}</span>
+                  <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-medium text-primary">我负责</span>
                   {p.abnormal && <Badge variant="destructive" className="h-4 px-1 text-[9px]">异常</Badge>}
-                  {savedSummary[p.id] && <Badge variant="outline" className="h-4 border-success px-1 text-[9px] text-success">已小结</Badge>}
                 </div>
-                <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{p.diagnosis}</p>
-                <p className="mt-1 text-[11px]">
-                  <span className="text-muted-foreground">{p.metric.label}:</span>
-                  <span className={`ml-1 font-semibold ${p.abnormal ? "text-destructive" : "text-foreground"}`}>
-                    {p.metric.value} {p.metric.unit}
+                <div className="mt-1 flex flex-wrap items-center gap-1">
+                  <span className="rounded bg-destructive/10 px-1.5 py-0.5 text-[10px] text-destructive">{p.condition}</span>
+                  <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">{p.stage}</span>
+                  {p.bed !== "—" && <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">床 {p.bed}</span>}
+                </div>
+                <div className="mt-1.5 flex items-center gap-1.5">
+                  <span
+                    onClick={(e) => { e.stopPropagation(); navigate(`/nurse/chat/patient/${p.id}`); }}
+                    className="flex items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-2 py-0.5 text-[10px] text-primary"
+                  >
+                    <MessageSquare className="h-3 w-3" />沟通
                   </span>
-                </p>
+                  <span className="flex items-center gap-1 rounded-full border border-warning/30 bg-warning/5 px-2 py-0.5 text-[10px] text-warning">
+                    <UsersIcon className="h-3 w-3" />会诊
+                  </span>
+                </div>
               </div>
-              <ChevronRight className="mt-2 h-4 w-4 shrink-0 text-muted-foreground" />
+              <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
             </button>
           ))}
         </div>
@@ -165,34 +173,65 @@ const NursePatients = () => {
       <ActionSheet
         open={!!selected}
         onOpenChange={(v) => !v && setSelected(null)}
-        title={selected ? `${selected.name} · 床 ${selected.bed}` : ""}
-        description={selected ? `${selected.age}岁 · ${selected.gender} · 主治 ${selected.doctor}` : ""}
+        title={selected ? `${selected.name}` : ""}
+        description={selected ? `${selected.age}岁 · ${selected.gender} · 床 ${selected.bed} · 主治 ${selected.doctor}` : ""}
         footer={
           <div className="grid grid-cols-3 gap-2">
-            <Button variant="outline" size="sm" onClick={() => selected && navigate(`/nurse/chat/doctor/${selected.id}`)}>
-              <Phone className="mr-1 h-3 w-3" />医生
-            </Button>
             <Button variant="outline" size="sm" onClick={() => selected && navigate(`/nurse/chat/patient/${selected.id}`)}>
-              <MessageSquare className="mr-1 h-3 w-3" />患者
+              <MessageSquare className="mr-1 h-3 w-3" />沟通
             </Button>
-            <Button size="sm" className="bg-gradient-nurse" onClick={saveSummary}>
-              <Save className="mr-1 h-3 w-3" />保存小结
+            <Button variant="outline" size="sm" onClick={() => selected && toast({ title: "正在呼叫", description: selected.name })}>
+              <Phone className="mr-1 h-3 w-3" />电话
+            </Button>
+            <Button size="sm" className="bg-gradient-nurse" onClick={() => navigate("/nurse/plans")}>
+              <FileText className="mr-1 h-3 w-3" />护理方案
             </Button>
           </div>
         }
       >
         {selected && (
           <div className="space-y-3 py-2">
+            {/* 头部头像 */}
+            <div className="flex flex-col items-center pb-1">
+              <div className={`flex h-20 w-20 items-center justify-center rounded-full text-2xl font-semibold ${selected.abnormal ? "bg-destructive/15 text-destructive" : "bg-primary/10 text-primary"}`}>
+                {selected.name[0]}
+              </div>
+              <p className="mt-2 text-base font-semibold">{selected.name}</p>
+              <p className="text-[11px] text-muted-foreground">更新于 2026-04-16 15:24</p>
+            </div>
+
+            {/* 患者档案 */}
+            <div>
+              <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-primary">
+                <FileText className="h-3.5 w-3.5" />患者档案
+              </p>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                {[
+                  { k: "姓名", v: selected.name },
+                  { k: "性别", v: selected.gender },
+                  { k: "年龄", v: `${selected.age}岁` },
+                  { k: "床位", v: selected.bed },
+                  { k: "主治医师", v: selected.doctor },
+                  { k: "在院阶段", v: selected.stage },
+                ].map((f) => (
+                  <div key={f.k} className="rounded-lg bg-muted/50 p-2.5">
+                    <p className="text-[10px] text-muted-foreground">{f.k}</p>
+                    <p className="mt-0.5 font-medium">{f.v}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* 诊断 / 过敏 */}
             <div className="grid grid-cols-2 gap-2">
               <div className="rounded-lg bg-primary/5 p-2.5 text-xs">
-                <div className="mb-1 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wide text-primary">
+                <div className="mb-1 flex items-center gap-1.5 text-[10px] font-medium text-primary">
                   <FileText className="h-3 w-3" />主要诊断
                 </div>
                 {selected.diagnosis}
               </div>
               <div className="rounded-lg bg-destructive/5 p-2.5 text-xs">
-                <div className="mb-1 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-wide text-destructive">
+                <div className="mb-1 flex items-center gap-1.5 text-[10px] font-medium text-destructive">
                   <AlertTriangle className="h-3 w-3" />过敏史
                 </div>
                 {selected.allergy}
@@ -225,29 +264,6 @@ const NursePatients = () => {
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* 今日小结 */}
-            <div>
-              <div className="mb-1.5 flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                  <ClipboardList className="h-3.5 w-3.5" />今日护理小结
-                </div>
-                <button onClick={aiFillSummary} className="flex items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] text-accent hover:bg-accent/20">
-                  <Sparkles className="h-3 w-3" />AI 一键填写
-                </button>
-              </div>
-              <Textarea
-                value={summaryDraft}
-                onChange={(e) => setSummaryDraft(e.target.value)}
-                placeholder="记录今日护理观察、操作执行情况、患者反应、下一步重点..."
-                className="min-h-[90px] text-xs"
-              />
-              {savedSummary[selected.id] && (
-                <p className="mt-1 flex items-center gap-1 text-[10px] text-success">
-                  <CheckCircle2 className="h-3 w-3" />{savedSummary[selected.id].date}已保存,可继续编辑
-                </p>
-              )}
             </div>
           </div>
         )}
