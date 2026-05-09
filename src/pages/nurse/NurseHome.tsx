@@ -76,7 +76,7 @@ const NurseHome = () => {
       <div className="flex items-center justify-between px-1 pt-2">
         <div className="flex items-center gap-1.5">
           <ClipboardCheck className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold">我的工作任务</h3>
+          <h3 className="text-sm font-semibold">任务列表</h3>
         </div>
         <span className="text-[10px] text-muted-foreground">按时间排序</span>
       </div>
