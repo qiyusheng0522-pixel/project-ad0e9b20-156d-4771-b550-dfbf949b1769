@@ -1,14 +1,13 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
-  Search, Filter, ChevronRight, Phone, MessageSquare, AlertTriangle,
-  FileText, Pill, Activity, ClipboardList, Save, Sparkles, CheckCircle2,
+  Search, ChevronRight, Phone, MessageSquare, AlertTriangle,
+  FileText, Pill, Users as UsersIcon,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import ActionSheet from "@/components/nurse/ActionSheet";
 
