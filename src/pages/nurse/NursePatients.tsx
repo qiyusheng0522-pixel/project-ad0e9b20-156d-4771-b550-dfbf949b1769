@@ -57,7 +57,7 @@ const NursePatients = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string>(params.get("filter") || "全部");
   const [conditionFilter, setConditionFilter] = useState<string>("全部疾病");
-  const [selected, setSelected] = useState<Patient | null>(null);
+  
 
   const conditions = useMemo(() => {
     const set = new Set<string>(["全部疾病"]);
@@ -80,7 +80,7 @@ const NursePatients = () => {
 
   const stageCount = (s: Stage) => allPatients.filter((p) => p.stage === s).length;
 
-  const openPatient = (p: Patient) => setSelected(p);
+  const openPatient = (p: Patient) => navigate(`/nurse/patients/${p.id}`);
 
   return (
     <div className="space-y-3 p-4">
