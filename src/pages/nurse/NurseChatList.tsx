@@ -14,26 +14,11 @@ const sessions = [
 
 const NurseChatList = () => {
   const navigate = useNavigate();
-  const [aiOn, setAiOn] = useState(true);
   const [q, setQ] = useState("");
   const list = sessions.filter((s) => !q || s.name.includes(q) || s.sub.includes(q));
 
   return (
     <div className="space-y-3 p-4">
-      {/* AI 开关 */}
-      <Card className="flex items-center justify-between bg-gradient-card p-3 shadow-soft">
-        <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10">
-            <Sparkles className="h-4 w-4 text-accent" />
-          </div>
-          <div>
-            <p className="text-sm font-semibold">AI 智能回复</p>
-            <p className="text-[11px] text-muted-foreground">{aiOn ? "AI 协助起草患者消息回复" : "已关闭，需人工回复"}</p>
-          </div>
-        </div>
-        <Switch checked={aiOn} onCheckedChange={setAiOn} />
-      </Card>
-
       {/* 搜索 */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
@@ -65,11 +50,6 @@ const NurseChatList = () => {
                     <span className="truncate text-sm font-semibold">{s.name}</span>
                     {s.abnormal && (
                       <span className="shrink-0 rounded bg-destructive/15 px-1.5 py-0.5 text-[10px] font-bold text-destructive">异常</span>
-                    )}
-                    {aiOn && s.kind === "patient" && (
-                      <span className="shrink-0 rounded bg-accent/10 px-1.5 py-0.5 text-[10px] text-accent flex items-center gap-0.5">
-                        <Sparkles className="h-2.5 w-2.5" />AI
-                      </span>
                     )}
                   </div>
                   <span className="shrink-0 text-[10px] text-muted-foreground">{s.time}</span>
