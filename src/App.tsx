@@ -9,6 +9,7 @@ import DoctorDashboard from "./pages/DoctorDashboard.tsx";
 import NurseLayout from "./pages/nurse/NurseLayout.tsx";
 import NurseHome from "./pages/nurse/NurseHome.tsx";
 import NursePatients from "./pages/nurse/NursePatients.tsx";
+import NursePatientDetail from "./pages/nurse/NursePatientDetail.tsx";
 import NurseHandover from "./pages/nurse/NurseHandover.tsx";
 import NurseEducation from "./pages/nurse/NurseEducation.tsx";
 import NurseChat from "./pages/nurse/NurseChat.tsx";
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/nurse" element={<NurseLayout />}>
             <Route index element={<NurseHome />} />
             <Route path="patients" element={<NursePatients />} />
+            <Route path="patients/:id" element={<NursePatientDetail />} />
             <Route path="handover" element={<NurseHandover />} />
             <Route path="education" element={<NurseEducation />} />
             <Route path="chat" element={<NurseChatList />} />
