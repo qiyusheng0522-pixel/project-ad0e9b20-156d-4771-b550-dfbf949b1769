@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import {
   Users, MessageSquare, BookOpen, LogOut as LogOutIcon, Activity,
+  Syringe, Droplet, ClipboardCheck, Clock, AlertTriangle, ChevronRight,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
