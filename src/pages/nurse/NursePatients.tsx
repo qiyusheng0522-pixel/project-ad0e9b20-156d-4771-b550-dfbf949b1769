@@ -99,6 +99,28 @@ const NursePatients = () => {
         />
       </div>
 
+      {/* 状态 Tabs */}
+      <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1">
+        {stageTabs.map((t) => {
+          const active = filter === t;
+          const count = t === "全部" ? allPatients.length : stageCount(t);
+          return (
+            <button
+              key={t}
+              onClick={() => setFilter(t)}
+              className={`flex shrink-0 items-center gap-1 rounded-full border px-3 py-1.5 text-xs transition-colors ${
+                active ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"
+              }`}
+            >
+              {t}
+              <span className={`rounded-full px-1.5 text-[10px] ${active ? "bg-white/20" : "bg-muted text-muted-foreground"}`}>
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* 病症筛选 */}
       <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1">
         {conditions.map((c) => {
