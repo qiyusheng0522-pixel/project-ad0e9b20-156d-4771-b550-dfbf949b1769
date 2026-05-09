@@ -60,9 +60,14 @@ const NursePatients = () => {
   const [params] = useSearchParams();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string>(params.get("filter") || "全部");
+  const [conditionFilter, setConditionFilter] = useState<string>("全部疾病");
   const [selected, setSelected] = useState<Patient | null>(null);
-  const [summaryDraft, setSummaryDraft] = useState("");
-  const [savedSummary, setSavedSummary] = useState<Record<number, { date: string; text: string }>>({});
+
+  const conditions = useMemo(() => {
+    const set = new Set<string>(["全部疾病"]);
+    allPatients.forEach((p) => set.add(p.condition));
+    return Array.from(set);
+  }, []);
 
   const list = useMemo(
     () =>
@@ -70,34 +75,16 @@ const NursePatients = () => {
         .filter((p) => {
           const ms = !search || p.name.includes(search) || p.bed.includes(search);
           const mf = filter === "全部" || p.stage === filter;
-          return ms && mf;
+          const mc = conditionFilter === "全部疾病" || p.condition === conditionFilter;
+          return ms && mf && mc;
         })
         .sort((a, b) => Number(b.abnormal) - Number(a.abnormal)),
-    [search, filter]
+    [search, filter, conditionFilter]
   );
 
   const stageCount = (s: Stage) => allPatients.filter((p) => p.stage === s).length;
 
-  const openPatient = (p: Patient) => {
-    setSelected(p);
-    setSummaryDraft(savedSummary[p.id]?.text || "");
-  };
-
-  const aiFillSummary = () => {
-    if (!selected) return;
-    const tpl = selected.diagnosis.includes("糖尿病")
-      ? `今日血糖监测 4 次,${selected.metric.label} ${selected.metric.value} ${selected.metric.unit};胰岛素按剂量执行,无低血糖反应;低糖饮食执行良好,睡眠正常。`
-      : selected.diagnosis.includes("甲")
-      ? `今日心率 ${selected.metric.value} ${selected.metric.unit},甲状腺相关症状有所缓解;按时服药,饮食低碘,情绪稳定。`
-      : `今日各项护理操作按计划完成,患者一般情况尚可,无特殊不适主诉。`;
-    setSummaryDraft(tpl);
-  };
-
-  const saveSummary = () => {
-    if (!selected) return;
-    setSavedSummary((s) => ({ ...s, [selected.id]: { date: "今日", text: summaryDraft } }));
-    toast({ title: "今日小结已保存", description: `${selected.name} · 床 ${selected.bed}` });
-  };
+  const openPatient = (p: Patient) => setSelected(p);
 
   return (
     <div className="space-y-3 p-4">
