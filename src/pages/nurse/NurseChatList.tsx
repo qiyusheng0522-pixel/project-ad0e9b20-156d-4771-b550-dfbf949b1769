@@ -48,70 +48,36 @@ const NurseChatList = () => {
             <button
               key={`${s.kind}-${s.id}`}
               onClick={() => navigate(`/nurse/chat/${s.kind}/${s.id}`)}
-              className={`block w-full px-3 py-3 text-left transition-colors hover:bg-muted/40 ${s.abnormal ? "bg-destructive/5" : ""}`}
+              className="flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-muted/40"
             >
-              <div className="flex items-start gap-2.5">
-                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${s.kind === "doctor" ? "bg-primary/15 text-primary" : s.abnormal ? "bg-destructive/15 text-destructive" : "bg-accent/15 text-accent"}`}>
+              <div className="relative shrink-0">
+                <div className={`flex h-11 w-11 items-center justify-center rounded-full ${s.kind === "doctor" ? "bg-primary/15 text-primary" : s.abnormal ? "bg-destructive/15 text-destructive" : "bg-accent/15 text-accent"}`}>
                   {s.kind === "doctor" ? <Stethoscope className="h-4 w-4" /> : <User className="h-4 w-4" />}
                 </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-1.5 min-w-0">
-                      <span className="truncate text-sm font-semibold">{s.name}</span>
-                      {s.abnormal && (
-                        <span className="shrink-0 rounded bg-destructive/15 px-1.5 py-0.5 text-[10px] font-bold text-destructive">异常</span>
-                      )}
-                    </div>
-                    <span className="shrink-0 text-[10px] text-muted-foreground">{s.time}</span>
-                  </div>
-                  <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{s.sub}</p>
-                  {/* 核心指标(参考图2) */}
-                  {s.kind === "patient" && s.vitals && (
-                    <div className="mt-1.5 flex gap-1.5">
-                      {Object.entries(s.vitals).map(([k, v], i) => {
-                        const isAbn = s.abnormal && i === 0;
-                        return (
-                          <div key={k} className={`flex-1 rounded px-1.5 py-1 text-center text-[10px] ${isAbn ? "bg-destructive/10" : "bg-muted/60"}`}>
-                            <p className="text-muted-foreground">{k}</p>
-                            <p className={`font-semibold ${isAbn ? "text-destructive" : ""}`}>{v}</p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                  <div className="mt-1.5 flex items-center justify-between gap-2">
-                    <p className="truncate text-xs text-foreground/80">{s.last}</p>
-                    {s.unread > 0 && (
-                      <span className="flex h-4 min-w-[16px] shrink-0 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-destructive-foreground">
-                        {s.unread}
+                {s.unread > 0 && (
+                  <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-destructive-foreground">
+                    {s.unread}
+                  </span>
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex min-w-0 items-center gap-1.5">
+                    <span className="truncate text-sm font-semibold">{s.name}</span>
+                    {s.abnormal && (
+                      <span className="shrink-0 rounded bg-destructive/15 px-1.5 py-0.5 text-[10px] font-bold text-destructive">异常</span>
+                    )}
+                    {aiOn && s.kind === "patient" && (
+                      <span className="shrink-0 rounded bg-accent/10 px-1.5 py-0.5 text-[10px] text-accent flex items-center gap-0.5">
+                        <Sparkles className="h-2.5 w-2.5" />AI
                       </span>
                     )}
                   </div>
+                  <span className="shrink-0 text-[10px] text-muted-foreground">{s.time}</span>
                 </div>
+                <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{s.sub}</p>
+                <p className="mt-0.5 truncate text-xs text-foreground/80">{s.last}</p>
               </div>
-              {/* 底部入口:档案/方案 (融合图1) */}
-              {s.kind === "patient" && (
-                <div className="mt-2 flex items-center gap-2 pl-12">
-                  <button
-                    onClick={(e) => { e.stopPropagation(); navigate(`/nurse/chat/patient/${s.id}`); }}
-                    className="flex items-center gap-1 rounded-full border bg-background px-2 py-0.5 text-[10px] text-muted-foreground hover:border-accent hover:text-accent"
-                  >
-                    <User className="h-3 w-3" />档案
-                  </button>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); navigate(`/nurse/plans`); }}
-                    className="flex items-center gap-1 rounded-full border bg-background px-2 py-0.5 text-[10px] text-muted-foreground hover:border-accent hover:text-accent"
-                  >
-                    <FileText className="h-3 w-3" />方案
-                    {s.abnormal && <span className="ml-0.5 h-1.5 w-1.5 rounded-full bg-destructive" />}
-                  </button>
-                  {aiOn && (
-                    <span className="flex items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] text-accent">
-                      <Sparkles className="h-3 w-3" />AI 草稿
-                    </span>
-                  )}
-                </div>
-              )}
             </button>
           ))}
         </div>
