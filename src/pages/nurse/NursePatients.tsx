@@ -1,15 +1,11 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
-  Search, ChevronRight, Phone, MessageSquare, AlertTriangle,
-  FileText, Pill, Users as UsersIcon,
+  Search, ChevronRight, MessageSquare, Users as UsersIcon,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
-import ActionSheet from "@/components/nurse/ActionSheet";
 
 type Stage = "待入院" | "院中" | "待出院" | "历史";
 type Patient = {
