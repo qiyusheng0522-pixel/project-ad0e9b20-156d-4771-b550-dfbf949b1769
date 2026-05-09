@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Sparkles, FileText, User, AlertTriangle, MessageSquare, Stethoscope } from "lucide-react";
+import { Search, Sparkles, User, Stethoscope } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
