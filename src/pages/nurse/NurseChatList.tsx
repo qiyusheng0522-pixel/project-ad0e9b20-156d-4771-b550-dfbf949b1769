@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Sparkles, User, Stethoscope } from "lucide-react";
+import { Search, User, Stethoscope } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
 
 const sessions = [
   { id: 1, kind: "patient" as const, name: "张伟", sub: "床 0312 · 高血压 III 级", last: "您先平卧休息，我马上过来。", time: "09:31", unread: 2, abnormal: true, vitals: { 血压: "178/108", 心率: "96", 血氧: "96%" } },
