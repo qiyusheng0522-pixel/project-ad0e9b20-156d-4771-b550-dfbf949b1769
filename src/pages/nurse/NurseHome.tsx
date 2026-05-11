@@ -72,58 +72,69 @@ const NurseHome = () => {
         ))}
       </div>
 
-      {/* 我的工作任务 */}
-      <div className="flex items-center justify-between px-1 pt-2">
-        <div className="flex items-center gap-1.5">
-          <ClipboardCheck className="h-4 w-4 text-primary" />
-          <h3 className="text-sm font-semibold">任务列表</h3>
-        </div>
-        <span className="text-[10px] text-muted-foreground">按时间排序</span>
-      </div>
-      <Card className="overflow-hidden">
-        <div className="divide-y">
-          {[
-            { time: "08:30", title: "三餐前胰岛素注射", patient: "张伟 · 床 0312", icon: Syringe, tone: "primary", urgent: true, sub: "门冬胰岛素 8U" },
-            { time: "09:00", title: "空腹血糖监测", patient: "李娜 · 床 0508", icon: Droplet, tone: "warning", urgent: true, sub: "目标 4.4-7.0 mmol/L" },
-            { time: "10:00", title: "执行医生健康方案", patient: "周婷 · 床 0305", icon: ClipboardCheck, tone: "accent", sub: "王主任 · 妊娠糖尿病方案待执行" },
-            { time: "11:00", title: "甲亢健康宣教", patient: "王强 · 床 0215", icon: BookOpen, tone: "primary", sub: "低碘饮食 / 服药指导" },
-            { time: "14:00", title: "出院转交-社区", patient: "陈敏 · 床 0617", icon: LogOutIcon, tone: "success", sub: "下转鼓楼社区卫生站" },
-            { time: "15:30", title: "心率异常复测", patient: "王强 · 床 0215", icon: AlertTriangle, tone: "destructive", urgent: true, sub: "上次 128 bpm" },
-          ].map((t, i) => {
-            const toneMap: Record<string, { bg: string; fg: string }> = {
-              primary: { bg: "bg-primary/10", fg: "text-primary" },
-              warning: { bg: "bg-warning/10", fg: "text-warning" },
-              accent: { bg: "bg-accent/10", fg: "text-accent" },
-              success: { bg: "bg-success/10", fg: "text-success" },
-              destructive: { bg: "bg-destructive/10", fg: "text-destructive" },
-            };
-            const c = toneMap[t.tone];
-            return (
-              <button
-                key={i}
-                onClick={() => navigate("/nurse/patients")}
-                className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-muted/40"
-              >
-                <div className="flex w-12 shrink-0 flex-col items-center">
-                  <Clock className="h-3 w-3 text-muted-foreground" />
-                  <span className="mt-0.5 text-[11px] font-semibold tabular-nums">{t.time}</span>
-                </div>
-                <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${c.bg}`}>
-                  <t.icon className={`h-4 w-4 ${c.fg}`} />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5">
-                    <span className="truncate text-[13px] font-medium">{t.title}</span>
-                    {t.urgent && <Badge variant="destructive" className="h-3.5 px-1 text-[9px]">紧急</Badge>}
-                  </div>
-                  <p className="mt-0.5 truncate text-[10px] text-muted-foreground">{t.patient} · {t.sub}</p>
-                </div>
-                <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
-              </button>
-            );
-          })}
-        </div>
-      </Card>
+      {/* 今日待办清单 */}
+      {(() => {
+        const tasks = [
+          { patientId: 1, type: "给药", priority: "紧急", bed: "0312", name: "张伟", sub: "门冬胰岛素 8U · IV · 08:30" },
+          { patientId: 2, type: "护理任务", priority: "紧急", bed: "0508", name: "李娜", sub: "空腹血糖监测 · 09:00" },
+          { patientId: 3, type: "病情观察", priority: "紧急", bed: "0215", name: "王强", sub: "心率异常复测 · 15:30" },
+          { patientId: 6, type: "给药", priority: "重要", bed: "0305", name: "周婷", sub: "门冬胰岛素 4U · po · 11:00" },
+          { patientId: 4, type: "宣教", priority: "重要", bed: "0617", name: "陈敏", sub: "出院饮食指导 · 14:00" },
+          { patientId: 3, type: "护理任务", priority: "重要", bed: "0215", name: "王强", sub: "低碘饮食宣教 · 11:00" },
+          { patientId: 4, type: "出院转交", priority: "普通", bed: "0617", name: "陈敏", sub: "下转鼓楼社区卫生站 · 14:00" },
+        ];
+        const typeStyle: Record<string, string> = {
+          "给药": "bg-primary/10 text-primary",
+          "护理任务": "bg-success/10 text-success",
+          "病情观察": "bg-warning/10 text-warning",
+          "宣教": "bg-accent/10 text-accent",
+          "出院转交": "bg-success/10 text-success",
+        };
+        const priorityStyle: Record<string, string> = {
+          "紧急": "bg-destructive/10 text-destructive",
+          "重要": "bg-warning/15 text-warning",
+          "普通": "bg-muted text-muted-foreground",
+        };
+        return (
+          <>
+            <div className="flex items-center justify-between px-1 pt-2">
+              <div className="flex items-center gap-1.5">
+                <ClipboardCheck className="h-4 w-4 text-primary" />
+                <h3 className="text-sm font-semibold">今日待办清单</h3>
+              </div>
+              <span className="text-[10px] text-muted-foreground">共 {tasks.length} 项 · 按优先级</span>
+            </div>
+            <Card className="overflow-hidden">
+              <div className="divide-y">
+                {tasks.map((t, i) => (
+                  <button
+                    key={i}
+                    onClick={() => navigate(`/nurse/patients/${t.patientId}`)}
+                    className="flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-muted/40"
+                  >
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-[11px] font-semibold text-muted-foreground">
+                      {i + 1}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${typeStyle[t.type] ?? "bg-muted text-muted-foreground"}`}>
+                          {t.type}
+                        </span>
+                        <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${priorityStyle[t.priority]}`}>
+                          {t.priority}
+                        </span>
+                        <span className="text-[13px] font-semibold">{t.bed} {t.name}</span>
+                      </div>
+                      <p className="mt-1 truncate text-[11px] text-muted-foreground">{t.sub}</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  </button>
+                ))}
+              </div>
+            </Card>
+          </>
+        );
+      })()}
     </div>
   );
 };
