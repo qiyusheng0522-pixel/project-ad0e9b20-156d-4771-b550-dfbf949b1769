@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 
 type Stage = "待入院" | "院中" | "待出院" | "历史";
+type Source = "南京市鼓楼医院" | "兰园社区";
 type Patient = {
   id: number;
   name: string;
@@ -17,6 +18,7 @@ type Patient = {
   diagnosis: string;
   condition: string; // 病症
   stage: Stage;
+  source: Source;
   allergy: string;
   doctor: string;
   abnormal: boolean;
@@ -26,25 +28,25 @@ type Patient = {
 };
 
 const allPatients: Patient[] = [
-  { id: 1, name: "张伟", bed: "0312", age: 58, gender: "男", diagnosis: "2 型糖尿病 · 酮症倾向", condition: "糖尿病", stage: "院中", allergy: "青霉素", doctor: "王主任", abnormal: true,
+  { id: 1, name: "张伟", bed: "0312", age: 58, gender: "男", diagnosis: "2 型糖尿病 · 酮症倾向", condition: "糖尿病", stage: "院中", source: "南京市鼓楼医院", allergy: "青霉素", doctor: "王主任", abnormal: true,
     metric: { label: "随机血糖", value: "16.8", unit: "mmol/L" }, hba1c: "9.2%",
     meds: [{ name: "门冬胰岛素", dose: "8U 三餐前皮下" }, { name: "二甲双胍", dose: "0.5g 每日 3 次" }] },
-  { id: 2, name: "李娜", bed: "0508", age: 45, gender: "女", diagnosis: "2 型糖尿病 · 周围神经病变", condition: "糖尿病", stage: "院中", allergy: "无", doctor: "李医生", abnormal: true,
+  { id: 2, name: "李娜", bed: "0508", age: 45, gender: "女", diagnosis: "2 型糖尿病 · 周围神经病变", condition: "糖尿病", stage: "院中", source: "南京市鼓楼医院", allergy: "无", doctor: "李医生", abnormal: true,
     metric: { label: "空腹血糖", value: "9.6", unit: "mmol/L" }, hba1c: "8.4%",
     meds: [{ name: "甘精胰岛素", dose: "16U 睡前" }, { name: "甲钴胺", dose: "0.5mg 每日 3 次" }] },
-  { id: 3, name: "王强", bed: "0215", age: 42, gender: "男", diagnosis: "Graves 病 · 甲状腺功能亢进", condition: "甲亢", stage: "院中", allergy: "无", doctor: "王主任", abnormal: true,
+  { id: 3, name: "王强", bed: "0215", age: 42, gender: "男", diagnosis: "Graves 病 · 甲状腺功能亢进", condition: "甲亢", stage: "院中", source: "南京市鼓楼医院", allergy: "无", doctor: "王主任", abnormal: true,
     metric: { label: "心率", value: "128", unit: "bpm" }, hba1c: "—",
     meds: [{ name: "甲巯咪唑", dose: "10mg 每日 3 次" }, { name: "美托洛尔", dose: "25mg 每日 2 次" }] },
-  { id: 4, name: "陈敏", bed: "0617", age: 51, gender: "女", diagnosis: "1 型糖尿病", condition: "糖尿病", stage: "待出院", allergy: "海鲜", doctor: "张医生", abnormal: false,
+  { id: 4, name: "陈敏", bed: "0617", age: 51, gender: "女", diagnosis: "1 型糖尿病", condition: "糖尿病", stage: "待出院", source: "南京市鼓楼医院", allergy: "海鲜", doctor: "张医生", abnormal: false,
     metric: { label: "空腹血糖", value: "6.2", unit: "mmol/L" }, hba1c: "6.8%",
     meds: [{ name: "门冬胰岛素", dose: "6U 三餐前" }, { name: "地特胰岛素", dose: "12U 睡前" }] },
-  { id: 5, name: "赵磊", bed: "—", age: 48, gender: "男", diagnosis: "桥本甲状腺炎 · 甲减", condition: "甲减", stage: "待入院", allergy: "无", doctor: "李医生", abnormal: false,
+  { id: 5, name: "赵磊", bed: "—", age: 48, gender: "男", diagnosis: "桥本甲状腺炎 · 甲减", condition: "甲减", stage: "待入院", source: "兰园社区", allergy: "无", doctor: "李医生", abnormal: false,
     metric: { label: "TSH", value: "5.8", unit: "mIU/L" }, hba1c: "—",
     meds: [{ name: "左甲状腺素钠", dose: "75μg 早餐前" }] },
-  { id: 6, name: "周婷", bed: "0305", age: 39, gender: "女", diagnosis: "妊娠糖尿病", condition: "糖尿病", stage: "院中", allergy: "无", doctor: "张医生", abnormal: false,
+  { id: 6, name: "周婷", bed: "0305", age: 39, gender: "女", diagnosis: "妊娠糖尿病", condition: "糖尿病", stage: "院中", source: "南京市鼓楼医院", allergy: "无", doctor: "张医生", abnormal: false,
     metric: { label: "餐后 2h", value: "8.4", unit: "mmol/L" }, hba1c: "6.2%",
     meds: [{ name: "门冬胰岛素", dose: "4U 三餐前" }] },
-  { id: 7, name: "刘洋", bed: "—", age: 36, gender: "男", diagnosis: "库欣综合征 · 继发性高血压", condition: "库欣综合征", stage: "历史", allergy: "无", doctor: "王主任", abnormal: false,
+  { id: 7, name: "刘洋", bed: "—", age: 36, gender: "男", diagnosis: "库欣综合征 · 继发性高血压", condition: "库欣综合征", stage: "历史", source: "兰园社区", allergy: "无", doctor: "王主任", abnormal: false,
     metric: { label: "血压", value: "138/86", unit: "mmHg" }, hba1c: "5.9%",
     meds: [{ name: "螺内酯", dose: "20mg 每日 2 次" }] },
 ];
@@ -165,6 +167,9 @@ const NursePatients = () => {
                   {p.abnormal && <Badge variant="destructive" className="h-4 px-1 text-[9px]">异常</Badge>}
                 </div>
                 <div className="mt-1 flex flex-wrap items-center gap-1">
+                  <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${p.source === "南京市鼓楼医院" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"}`}>
+                    {p.source === "南京市鼓楼医院" ? "鼓楼" : "兰园社区"}
+                  </span>
                   <span className="rounded bg-destructive/10 px-1.5 py-0.5 text-[10px] text-destructive">{p.condition}</span>
                   <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">{p.stage}</span>
                   {p.bed !== "—" && <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">床 {p.bed}</span>}
