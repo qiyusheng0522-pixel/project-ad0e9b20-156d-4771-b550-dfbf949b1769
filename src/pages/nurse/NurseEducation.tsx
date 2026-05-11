@@ -50,10 +50,9 @@ const NurseEducation = () => {
   return (
     <div className="space-y-4 p-4">
       {/* Tabs */}
-      <div className="grid grid-cols-4 gap-1 rounded-lg bg-muted p-1">
+      <div className="grid grid-cols-3 gap-1 rounded-lg bg-muted p-1">
         {[
           { k: "todo", label: "待办" },
-          { k: "content", label: "内容" },
           { k: "push", label: "推送" },
           { k: "monitor", label: "监控" },
         ].map((t) => (
