@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Send, Phone, Mic, Stethoscope, User, MoreVertical, Sparkles,
-  RefreshCw, FileText, X,
+  RefreshCw, FileText, X, Hospital,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,6 +37,9 @@ interface Props {
   planUnread?: number;
   onArchive?: () => void;
   onPlan?: () => void;
+  showPlan?: boolean;
+  showReferral?: boolean;
+  onReferral?: () => void;
 }
 
 const ChatScreen = ({
@@ -47,6 +50,9 @@ const ChatScreen = ({
   planUnread = 1,
   onArchive,
   onPlan,
+  showPlan = false,
+  showReferral = false,
+  onReferral,
 }: Props) => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<ChatMsg[]>(initialMessages);
@@ -194,17 +200,30 @@ const ChatScreen = ({
             >
               <User className="h-3.5 w-3.5" />档案
             </button>
-            <button
-              onClick={onPlan ?? (() => toast({ title: "查看护理方案" }))}
-              className="relative flex items-center gap-1 rounded-full border bg-background px-3 py-1 text-xs text-muted-foreground hover:border-primary hover:text-primary"
-            >
-              <FileText className="h-3.5 w-3.5" />方案
-              {planUnread > 0 && (
-                <span className="ml-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-destructive-foreground">
-                  {planUnread}
-                </span>
-              )}
-            </button>
+            {showPlan && (
+              <button
+                onClick={onPlan ?? (() => toast({ title: "查看护理方案" }))}
+                className="relative flex items-center gap-1 rounded-full border bg-background px-3 py-1 text-xs text-muted-foreground hover:border-primary hover:text-primary"
+              >
+                <FileText className="h-3.5 w-3.5" />方案
+                {planUnread > 0 && (
+                  <span className="ml-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-destructive-foreground">
+                    {planUnread}
+                  </span>
+                )}
+              </button>
+            )}
+            {showReferral && (
+              <button
+                onClick={onReferral ?? (() => {
+                  toast({ title: "已发起转诊", description: "正在跳转至鼓楼互联网医院..." });
+                  setTimeout(() => window.open("https://www.njglyy.com/", "_blank"), 600);
+                })}
+                className="flex items-center gap-1 rounded-full border bg-background px-3 py-1 text-xs text-muted-foreground hover:border-primary hover:text-primary"
+              >
+                <Hospital className="h-3.5 w-3.5" />转诊
+              </button>
+            )}
           </div>
         </div>
 
