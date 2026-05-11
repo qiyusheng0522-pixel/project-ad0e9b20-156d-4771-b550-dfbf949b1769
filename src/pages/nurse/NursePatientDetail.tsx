@@ -380,15 +380,68 @@ const NursePatientDetail = () => {
           </div>
         </Card>
 
-        <div className="sticky bottom-0 -mx-3 grid grid-cols-2 gap-2 border-t bg-card/95 p-3 backdrop-blur">
+        <div className="sticky bottom-0 -mx-3 grid grid-cols-3 gap-2 border-t bg-card/95 p-3 backdrop-blur">
           <Button variant="outline" onClick={() => navigate(`/nurse/chat/patient/${p.id}`)}>
             <MessageSquare className="mr-1 h-3.5 w-3.5" />沟通
+          </Button>
+          <Button variant="outline" onClick={() => setPushEduOpen(true)}>
+            <Send className="mr-1 h-3.5 w-3.5" />立即推送
           </Button>
           <Button className="bg-gradient-nurse" onClick={() => toast({ title: "已生成出院下转单", description: "可在出院转交中推送至社区" })}>
             <FileText className="mr-1 h-3.5 w-3.5" />下转社区
           </Button>
         </div>
       </div>
+
+      <ActionSheet
+        open={pushEduOpen}
+        onOpenChange={(v) => (v ? setPushEduOpen(true) : closePushEdu())}
+        title="立即推送 · 宣教内容"
+        description={`向 ${p.name} 推送宣教 · 已选 ${selectedEdu.size} 条`}
+        footer={
+          <div className="grid grid-cols-2 gap-2">
+            <Button variant="outline" onClick={closePushEdu}>取消</Button>
+            <Button className="bg-gradient-nurse" onClick={confirmPushEdu}>
+              <Send className="mr-1 h-4 w-4" />确认推送
+            </Button>
+          </div>
+        }
+      >
+        <div className="space-y-3 py-2">
+          {Object.entries(eduGroups).map(([cat, items]) => (
+            <div key={cat}>
+              <div className="mb-1.5 flex items-center gap-1.5">
+                <BookOpen className="h-3.5 w-3.5 text-accent" />
+                <span className="text-xs font-semibold text-muted-foreground">{cat}</span>
+              </div>
+              <div className="space-y-1.5">
+                {items.map((c) => {
+                  const checked = selectedEdu.has(c.id);
+                  return (
+                    <label
+                      key={c.id}
+                      className={`flex cursor-pointer items-start gap-3 rounded-lg border p-2.5 text-xs transition-colors ${
+                        checked ? "border-accent bg-accent/5" : ""
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggleEdu(c.id)}
+                        className="mt-0.5 h-4 w-4 accent-accent"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium">{c.title}</p>
+                        <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{c.desc} · {c.duration}</p>
+                      </div>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </ActionSheet>
     </div>
   );
 };
