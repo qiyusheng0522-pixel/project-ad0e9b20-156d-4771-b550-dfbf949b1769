@@ -31,7 +31,7 @@ const learners = [
 type Content = (typeof aiRecommended)[0] | (typeof library)[0];
 
 const NurseEducation = () => {
-  const [tab, setTab] = useState<"todo" | "content" | "push" | "monitor">("todo");
+  const [tab, setTab] = useState<"todo" | "push" | "monitor">("todo");
   const [contentSheet, setContentSheet] = useState<Content | null>(null);
   const [pushTargetSheet, setPushTargetSheet] = useState<{ content: Content; mode: "batch" | "single" } | null>(null);
   const [pushModeSheet, setPushModeSheet] = useState<"batch" | "single" | null>(null);
@@ -50,10 +50,9 @@ const NurseEducation = () => {
   return (
     <div className="space-y-4 p-4">
       {/* Tabs */}
-      <div className="grid grid-cols-4 gap-1 rounded-lg bg-muted p-1">
+      <div className="grid grid-cols-3 gap-1 rounded-lg bg-muted p-1">
         {[
           { k: "todo", label: "待办" },
-          { k: "content", label: "内容" },
           { k: "push", label: "推送" },
           { k: "monitor", label: "监控" },
         ].map((t) => (
@@ -131,80 +130,7 @@ const NurseEducation = () => {
         </>
       )}
 
-      {tab === "content" && (
-        <>
-          {/* AI 推荐 */}
-          <Card className="overflow-hidden">
-            <div className="flex items-center justify-between border-b bg-gradient-to-r from-accent/10 to-transparent px-4 py-3">
-              <div className="flex items-center gap-1.5">
-                <Sparkles className="h-4 w-4 text-accent" />
-                <h3 className="text-sm font-semibold">AI 推荐宣教</h3>
-              </div>
-              <Badge className="h-5 bg-accent text-accent-foreground">智能匹配</Badge>
-            </div>
-            <div className="divide-y">
-              {aiRecommended.map((c) => (
-                <button
-                  key={c.id}
-                  onClick={() => setContentSheet(c)}
-                  className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/30"
-                >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                    <BookOpen className="h-4 w-4 text-accent" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">{c.title}</p>
-                    <p className="mt-0.5 text-[11px] text-muted-foreground">{c.category} · 已学 {c.views} 人</p>
-                  </div>
-                  <Badge variant="outline" className="h-5 border-accent text-[10px] text-accent">{c.match}</Badge>
-                </button>
-              ))}
-            </div>
-          </Card>
 
-          {/* 宣教库 */}
-          <Card className="overflow-hidden">
-            <div className="flex items-center justify-between border-b px-4 py-3">
-              <h3 className="text-sm font-semibold">宣教库</h3>
-              <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => toast({ title: "已打开宣教库" })}>
-                全部 <ChevronRight className="ml-0.5 h-3 w-3" />
-              </Button>
-            </div>
-            <div className="border-b p-3">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-                <Input placeholder="搜索宣教内容" className="h-8 pl-8 text-xs" />
-              </div>
-            </div>
-            <div className="divide-y">
-              {library.map((c) => (
-                <div key={c.id} className="flex items-center gap-3 px-4 py-3">
-                  <button
-                    onClick={() => setContentSheet(c)}
-                    className="flex min-w-0 flex-1 items-center gap-3 text-left"
-                  >
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                      <Play className="h-3.5 w-3.5 text-primary" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm">{c.title}</p>
-                      <p className="text-[11px] text-muted-foreground">{c.category} · {c.duration}</p>
-                    </div>
-                  </button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="h-7 text-xs text-accent"
-                    onClick={() => setPushTargetSheet({ content: c, mode: "batch" })}
-                  >
-                    推送
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </>
-      )}
 
       {tab === "push" && (
         <>

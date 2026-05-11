@@ -106,7 +106,13 @@ const NurseHome = () => {
                 {tasks.map((t, i) => (
                   <button
                     key={i}
-                    onClick={() => navigate(`/nurse/patients/${t.patientId}`)}
+                    onClick={() => {
+                      const action =
+                        t.type === "宣教" ? "?action=push-edu" :
+                        t.type === "沟通" ? "?action=chat" :
+                        t.type === "出院转交" ? "?action=handover" : "";
+                      navigate(`/nurse/patients/${t.patientId}${action}`);
+                    }}
                     className="flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-muted/40"
                   >
                     <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-[11px] font-semibold text-muted-foreground">

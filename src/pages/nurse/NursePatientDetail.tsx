@@ -1,12 +1,14 @@
-import { useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   ArrowLeft, MessageSquare, Phone, Users as UsersIcon, FileText,
-  ChevronDown, CheckCircle2, Stethoscope, TrendingUp, Activity,
+  ChevronDown, CheckCircle2, Stethoscope, TrendingUp, Activity, BookOpen, Send,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import ActionSheet from "@/components/nurse/ActionSheet";
+import { eduByCategory } from "@/data/education";
 
 type Med = { name: string; freq: string; per: string; start: string; end: string; days: number; ended?: boolean };
 type Health = { label: string; value: string; unit: string; status: "正常" | "偏高" | "偏低" };
@@ -137,9 +139,45 @@ const TrendChart = ({ points, range }: { points: { date: string; v: number }[]; 
 const NursePatientDetail = () => {
   const { id = "" } = useParams();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const p = patients[id] || fallback(id);
   const [showMore, setShowMore] = useState(false);
   const [trendIdx, setTrendIdx] = useState(0);
+  const [pushEduOpen, setPushEduOpen] = useState(false);
+  const [selectedEdu, setSelectedEdu] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    const action = searchParams.get("action");
+    if (action === "push-edu") setPushEduOpen(true);
+    if (action === "chat") {
+      // jump straight into chat per task intent
+      navigate(`/nurse/chat/patient/${id}`, { replace: true });
+    }
+  }, [searchParams, id, navigate]);
+
+  const eduGroups = useMemo(() => eduByCategory(), []);
+  const toggleEdu = (cid: number) =>
+    setSelectedEdu((s) => {
+      const n = new Set(s);
+      n.has(cid) ? n.delete(cid) : n.add(cid);
+      return n;
+    });
+  const closePushEdu = () => {
+    setPushEduOpen(false);
+    if (searchParams.get("action")) {
+      searchParams.delete("action");
+      setSearchParams(searchParams, { replace: true });
+    }
+  };
+  const confirmPushEdu = () => {
+    if (selectedEdu.size === 0) {
+      toast({ title: "请选择宣教内容" });
+      return;
+    }
+    toast({ title: "推送成功", description: `已向 ${p.name} 推送 ${selectedEdu.size} 条宣教` });
+    setSelectedEdu(new Set());
+    closePushEdu();
+  };
 
   const fields = useMemo(() => {
     const base = [
@@ -342,15 +380,68 @@ const NursePatientDetail = () => {
           </div>
         </Card>
 
-        <div className="sticky bottom-0 -mx-3 grid grid-cols-2 gap-2 border-t bg-card/95 p-3 backdrop-blur">
+        <div className="sticky bottom-0 -mx-3 grid grid-cols-3 gap-2 border-t bg-card/95 p-3 backdrop-blur">
           <Button variant="outline" onClick={() => navigate(`/nurse/chat/patient/${p.id}`)}>
             <MessageSquare className="mr-1 h-3.5 w-3.5" />沟通
+          </Button>
+          <Button variant="outline" onClick={() => setPushEduOpen(true)}>
+            <Send className="mr-1 h-3.5 w-3.5" />立即推送
           </Button>
           <Button className="bg-gradient-nurse" onClick={() => toast({ title: "已生成出院下转单", description: "可在出院转交中推送至社区" })}>
             <FileText className="mr-1 h-3.5 w-3.5" />下转社区
           </Button>
         </div>
       </div>
+
+      <ActionSheet
+        open={pushEduOpen}
+        onOpenChange={(v) => (v ? setPushEduOpen(true) : closePushEdu())}
+        title="立即推送 · 宣教内容"
+        description={`向 ${p.name} 推送宣教 · 已选 ${selectedEdu.size} 条`}
+        footer={
+          <div className="grid grid-cols-2 gap-2">
+            <Button variant="outline" onClick={closePushEdu}>取消</Button>
+            <Button className="bg-gradient-nurse" onClick={confirmPushEdu}>
+              <Send className="mr-1 h-4 w-4" />确认推送
+            </Button>
+          </div>
+        }
+      >
+        <div className="space-y-3 py-2">
+          {Object.entries(eduGroups).map(([cat, items]) => (
+            <div key={cat}>
+              <div className="mb-1.5 flex items-center gap-1.5">
+                <BookOpen className="h-3.5 w-3.5 text-accent" />
+                <span className="text-xs font-semibold text-muted-foreground">{cat}</span>
+              </div>
+              <div className="space-y-1.5">
+                {items.map((c) => {
+                  const checked = selectedEdu.has(c.id);
+                  return (
+                    <label
+                      key={c.id}
+                      className={`flex cursor-pointer items-start gap-3 rounded-lg border p-2.5 text-xs transition-colors ${
+                        checked ? "border-accent bg-accent/5" : ""
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggleEdu(c.id)}
+                        className="mt-0.5 h-4 w-4 accent-accent"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium">{c.title}</p>
+                        <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{c.desc} · {c.duration}</p>
+                      </div>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </ActionSheet>
     </div>
   );
 };
