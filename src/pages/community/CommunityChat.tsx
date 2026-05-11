@@ -38,6 +38,7 @@ const CommunityChat = () => {
       peer={peer}
       initialMessages={isDoctor ? seedDoctor : seedPatient}
       gradientClass="bg-gradient-community"
+      showReferral={!isDoctor}
     />
   );
 };
