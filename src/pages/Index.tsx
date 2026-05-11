@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Stethoscope, HeartPulse, ArrowRight, Activity, Building2 } from "lucide-react";
+import { HeartPulse, ArrowRight, Activity, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
@@ -25,31 +25,7 @@ const Index = () => {
           </p>
         </div>
 
-        <div className="mx-auto mt-12 grid max-w-6xl gap-6 md:grid-cols-3">
-          <Link
-            to="/doctor"
-            className="group relative overflow-hidden rounded-2xl border bg-card p-8 shadow-card transition-all hover:-translate-y-1 hover:shadow-elegant"
-          >
-            <div className="absolute right-0 top-0 h-32 w-32 -translate-y-12 translate-x-12 rounded-full bg-gradient-doctor opacity-10 transition-transform group-hover:scale-150" />
-            <div className="relative">
-              <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-doctor text-primary-foreground shadow-soft">
-                <Stethoscope className="h-7 w-7" />
-              </div>
-              <h2 className="text-2xl font-semibold">医生工作台</h2>
-              <p className="mt-2 text-muted-foreground">
-                日程预约、患者队列、电子病历、处方开具,一站式管理
-              </p>
-              <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
-                <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" />今日预约与候诊队列</li>
-                <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" />快捷开方与病历模板</li>
-                <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" />诊疗数据统计</li>
-              </ul>
-              <Button className="mt-8 w-full bg-gradient-doctor hover:opacity-90">
-                进入医生端 <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
-            </div>
-          </Link>
-
+        <div className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-2">
           <Link
             to="/nurse"
             className="group relative overflow-hidden rounded-2xl border bg-card p-8 shadow-card transition-all hover:-translate-y-1 hover:shadow-elegant"
