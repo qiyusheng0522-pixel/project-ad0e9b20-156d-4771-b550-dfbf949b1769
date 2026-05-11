@@ -139,9 +139,45 @@ const TrendChart = ({ points, range }: { points: { date: string; v: number }[]; 
 const NursePatientDetail = () => {
   const { id = "" } = useParams();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const p = patients[id] || fallback(id);
   const [showMore, setShowMore] = useState(false);
   const [trendIdx, setTrendIdx] = useState(0);
+  const [pushEduOpen, setPushEduOpen] = useState(false);
+  const [selectedEdu, setSelectedEdu] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    const action = searchParams.get("action");
+    if (action === "push-edu") setPushEduOpen(true);
+    if (action === "chat") {
+      // jump straight into chat per task intent
+      navigate(`/nurse/chat/patient/${id}`, { replace: true });
+    }
+  }, [searchParams, id, navigate]);
+
+  const eduGroups = useMemo(() => eduByCategory(), []);
+  const toggleEdu = (cid: number) =>
+    setSelectedEdu((s) => {
+      const n = new Set(s);
+      n.has(cid) ? n.delete(cid) : n.add(cid);
+      return n;
+    });
+  const closePushEdu = () => {
+    setPushEduOpen(false);
+    if (searchParams.get("action")) {
+      searchParams.delete("action");
+      setSearchParams(searchParams, { replace: true });
+    }
+  };
+  const confirmPushEdu = () => {
+    if (selectedEdu.size === 0) {
+      toast({ title: "请选择宣教内容" });
+      return;
+    }
+    toast({ title: "推送成功", description: `已向 ${p.name} 推送 ${selectedEdu.size} 条宣教` });
+    setSelectedEdu(new Set());
+    closePushEdu();
+  };
 
   const fields = useMemo(() => {
     const base = [
