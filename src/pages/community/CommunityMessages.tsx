@@ -1,134 +1,67 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sparkles, AlertTriangle, ArrowUpCircle, CheckCircle2, ChevronRight, Bell } from "lucide-react";
+import { Search, User, Stethoscope } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import ActionSheet from "@/components/nurse/ActionSheet";
-import { toast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
 
-type Msg = {
-  id: number;
-  type: "new-patient" | "alert" | "refer-result" | "system";
-  title: string;
-  desc: string;
-  time: string;
-  unread: boolean;
-};
-
-const initial: Msg[] = [
-  { id: 1, type: "new-patient", title: "收到新患者", desc: "南京市鼓楼医院下转 张伟,请及时建档随访", time: "刚刚", unread: true },
-  { id: 2, type: "alert", title: "异常值预警", desc: "李建国 空腹血糖 12.8 mmol/L,请立即处置", time: "10 分钟前", unread: true },
-  { id: 3, type: "refer-result", title: "上转结果反馈", desc: "王建军 已被南京市鼓楼医院内分泌科接收,预约明日 9:00 门诊", time: "1 小时前", unread: true },
-  { id: 4, type: "new-patient", title: "收到新患者", desc: "南京市鼓楼医院下转 陈敏,心律失常观察", time: "2 小时前", unread: true },
-  { id: 5, type: "system", title: "随访提醒", desc: "今日有 3 位患者待随访", time: "今早 8:00", unread: false },
+const sessions = [
+  { id: 1, kind: "patient" as const, name: "李建国", sub: "兰园社区 · 糖尿病", source: "兰园社区", last: "医生,我空腹血糖又高了。", time: "09:31", unread: 2, abnormal: true },
+  { id: 5, kind: "patient" as const, name: "周春华", sub: "兰园社区 · 糖尿病", source: "兰园社区", last: "今天测的血糖给您发过去。", time: "09:10", unread: 1, abnormal: true },
+  { id: 4, kind: "doctor" as const, name: "王主任", sub: "南京市鼓楼医院 · 内分泌科", source: "南京市鼓楼医院", last: "陈敏的复诊安排在周三上午。", time: "09:14", unread: 1, abnormal: false },
+  { id: 2, kind: "patient" as const, name: "张伟", sub: "南京市鼓楼医院下转 · 高血压", source: "南京市鼓楼医院", last: "好的,我按时吃药。", time: "昨日", unread: 0, abnormal: false },
+  { id: 3, kind: "patient" as const, name: "刘秀英", sub: "兰园社区 · 高血压", source: "兰园社区", last: "谢谢张医生。", time: "昨日", unread: 0, abnormal: false },
 ];
-
-const meta = {
-  "new-patient": { icon: Sparkles, color: "text-accent", bg: "bg-accent/15" },
-  "alert": { icon: AlertTriangle, color: "text-destructive", bg: "bg-destructive/15" },
-  "refer-result": { icon: ArrowUpCircle, color: "text-warning", bg: "bg-warning/15" },
-  "system": { icon: Bell, color: "text-primary", bg: "bg-primary/15" },
-} as const;
 
 const CommunityMessages = () => {
   const navigate = useNavigate();
-  const [msgs, setMsgs] = useState(initial);
-  const [active, setActive] = useState<Msg | null>(null);
-
-  const open = (m: Msg) => {
-    setActive(m);
-    setMsgs((prev) => prev.map((x) => (x.id === m.id ? { ...x, unread: false } : x)));
-  };
-
-  const markAll = () => {
-    setMsgs((prev) => prev.map((x) => ({ ...x, unread: false })));
-    toast({ title: "已全部标为已读" });
-  };
-
-  const handleAction = (m: Msg) => {
-    setActive(null);
-    if (m.type === "new-patient") navigate("/community/patients?tab=new");
-    else if (m.type === "alert") navigate("/community");
-    else if (m.type === "refer-result") toast({ title: "查看上转详情" });
-  };
-
-  const unreadCount = msgs.filter((m) => m.unread).length;
+  const [q, setQ] = useState("");
+  const list = sessions.filter((s) => !q || s.name.includes(q) || s.sub.includes(q));
 
   return (
-    <div className="space-y-3 p-3">
-      <Card className="flex items-center justify-between p-3">
-        <div>
-          <p className="text-sm font-semibold">消息中心</p>
-          <p className="text-[11px] text-muted-foreground">未读 {unreadCount} · 共 {msgs.length} 条</p>
-        </div>
-        <Button variant="outline" size="sm" className="h-8 text-xs" onClick={markAll} disabled={!unreadCount}>
-          <CheckCircle2 className="mr-1 h-3 w-3" />全部已读
-        </Button>
-      </Card>
-
-      <div className="space-y-2">
-        {msgs.map((m) => {
-          const M = meta[m.type];
-          return (
-            <Card key={m.id} className={`overflow-hidden ${m.unread ? "border-accent/40" : ""}`}>
-              <button onClick={() => open(m)} className="flex w-full items-start gap-3 p-3 text-left">
-                <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${M.bg} ${M.color}`}>
-                  <M.icon className="h-4 w-4" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5">
-                    <p className="truncate text-sm font-medium">{m.title}</p>
-                    {m.unread && <span className="h-1.5 w-1.5 rounded-full bg-destructive" />}
-                  </div>
-                  <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{m.desc}</p>
-                  <p className="mt-0.5 text-[10px] text-muted-foreground">{m.time}</p>
-                </div>
-                <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
-              </button>
-            </Card>
-          );
-        })}
+    <div className="space-y-3 p-4">
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+        <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="搜索患者/医生" className="h-9 pl-8 text-sm" />
       </div>
 
-      <ActionSheet
-        open={!!active}
-        onOpenChange={(v) => !v && setActive(null)}
-        title={active?.title ?? ""}
-        description={active?.time}
-        footer={
-          active && (
-            <div className="grid grid-cols-2 gap-2">
-              <Button variant="outline" onClick={() => setActive(null)}>关闭</Button>
-              <Button className="bg-gradient-community" onClick={() => handleAction(active)}>
-                {active.type === "new-patient" ? "去建档" : active.type === "alert" ? "去处置" : active.type === "refer-result" ? "查看详情" : "知道了"}
-              </Button>
-            </div>
-          )
-        }
-      >
-        {active && (
-          <div className="space-y-3 py-2 text-xs">
-            <div className="rounded-lg bg-muted/40 p-3">
-              <Badge variant="secondary" className="h-5 text-[10px]">
-                {active.type === "new-patient" ? "新患者" : active.type === "alert" ? "预警" : active.type === "refer-result" ? "上转反馈" : "系统"}
-              </Badge>
-              <p className="mt-2 text-foreground">{active.desc}</p>
-            </div>
-            {active.type === "refer-result" && (
-              <div className="rounded-lg border p-3">
-                <p className="font-medium">医院反馈详情</p>
-                <ul className="mt-1 space-y-1 text-muted-foreground">
-                  <li>· 接收科室:内分泌科</li>
-                  <li>· 接诊医生:王主任</li>
-                  <li>· 预约时间:明日 09:00</li>
-                  <li>· 备注:请携带近 7 日数据记录</li>
-                </ul>
+      <Card className="overflow-hidden">
+        <div className="divide-y">
+          {list.map((s) => (
+            <button
+              key={`${s.kind}-${s.id}`}
+              onClick={() => navigate(`/community/chat/${s.kind}/${s.id}`)}
+              className="flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-muted/40"
+            >
+              <div className="relative shrink-0">
+                <div className={`flex h-11 w-11 items-center justify-center rounded-full ${s.kind === "doctor" ? "bg-primary/15 text-primary" : s.abnormal ? "bg-destructive/15 text-destructive" : "bg-accent/15 text-accent"}`}>
+                  {s.kind === "doctor" ? <Stethoscope className="h-4 w-4" /> : <User className="h-4 w-4" />}
+                </div>
+                {s.unread > 0 && (
+                  <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-destructive-foreground">
+                    {s.unread}
+                  </span>
+                )}
               </div>
-            )}
-          </div>
-        )}
-      </ActionSheet>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex min-w-0 items-center gap-1.5">
+                    <span className="truncate text-sm font-semibold">{s.name}</span>
+                    <span className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium ${s.source === "南京市鼓楼医院" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"}`}>
+                      {s.source === "南京市鼓楼医院" ? "鼓楼" : "兰园社区"}
+                    </span>
+                    {s.abnormal && (
+                      <span className="shrink-0 rounded bg-destructive/15 px-1.5 py-0.5 text-[10px] font-bold text-destructive">异常</span>
+                    )}
+                  </div>
+                  <span className="shrink-0 text-[10px] text-muted-foreground">{s.time}</span>
+                </div>
+                <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{s.sub}</p>
+                <p className="mt-0.5 truncate text-xs text-foreground/80">{s.last}</p>
+              </div>
+            </button>
+          ))}
+        </div>
+      </Card>
     </div>
   );
 };

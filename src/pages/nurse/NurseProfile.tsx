@@ -135,7 +135,6 @@ const NurseProfile = () => {
       <Card className="overflow-hidden">
         <div className="divide-y">
           {[
-            { label: "我的任务", icon: ClipboardCheck, badge: "12", to: "/nurse/tasks" },
             { label: "出院转交", icon: LogOutIcon, to: "/nurse/handover" },
             { label: "宣教管理", icon: BookOpen, to: "/nurse/education" },
             { label: "成就徽章", icon: Award, badge: "新", action: () => toast({ title: "您已获得 8 枚徽章" }) },

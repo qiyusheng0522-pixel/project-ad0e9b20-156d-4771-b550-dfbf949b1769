@@ -346,8 +346,8 @@ const NursePatientDetail = () => {
           <Button variant="outline" onClick={() => navigate(`/nurse/chat/patient/${p.id}`)}>
             <MessageSquare className="mr-1 h-3.5 w-3.5" />沟通
           </Button>
-          <Button className="bg-gradient-nurse" onClick={() => navigate("/nurse/plans")}>
-            <FileText className="mr-1 h-3.5 w-3.5" />护理方案
+          <Button className="bg-gradient-nurse" onClick={() => toast({ title: "已生成出院下转单", description: "可在出院转交中推送至社区" })}>
+            <FileText className="mr-1 h-3.5 w-3.5" />下转社区
           </Button>
         </div>
       </div>

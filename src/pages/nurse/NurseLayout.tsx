@@ -15,7 +15,6 @@ const titleMap: Record<string, string> = {
   "/nurse/handover": "出院转交",
   "/nurse/education": "宣教管理",
   "/nurse/chat": "沟通",
-  "/nurse/plans": "护理方案",
   "/nurse/profile": "我的",
 };
 

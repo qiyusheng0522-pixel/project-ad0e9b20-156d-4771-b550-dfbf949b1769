@@ -85,7 +85,7 @@ const NurseHome = () => {
           {[
             { time: "08:30", title: "三餐前胰岛素注射", patient: "张伟 · 床 0312", icon: Syringe, tone: "primary", urgent: true, sub: "门冬胰岛素 8U" },
             { time: "09:00", title: "空腹血糖监测", patient: "李娜 · 床 0508", icon: Droplet, tone: "warning", urgent: true, sub: "目标 4.4-7.0 mmol/L" },
-            { time: "10:00", title: "护理方案审核", patient: "周婷 · 床 0305", icon: ClipboardCheck, tone: "accent", sub: "妊娠糖尿病 · AI 已生成" },
+            { time: "10:00", title: "执行医生健康方案", patient: "周婷 · 床 0305", icon: ClipboardCheck, tone: "accent", sub: "王主任 · 妊娠糖尿病方案待执行" },
             { time: "11:00", title: "甲亢健康宣教", patient: "王强 · 床 0215", icon: BookOpen, tone: "primary", sub: "低碘饮食 / 服药指导" },
             { time: "14:00", title: "出院转交-社区", patient: "陈敏 · 床 0617", icon: LogOutIcon, tone: "success", sub: "下转鼓楼社区卫生站" },
             { time: "15:30", title: "心率异常复测", patient: "王强 · 床 0215", icon: AlertTriangle, tone: "destructive", urgent: true, sub: "上次 128 bpm" },
