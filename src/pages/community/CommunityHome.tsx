@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { Users, BookOpen, MessageSquare, AlertTriangle, Activity } from "lucide-react";
+import { Users, BookOpen, MessageSquare, AlertTriangle, Activity, ClipboardCheck, ChevronRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "@/hooks/use-toast";
 
 const CommunityHome = () => {
   const navigate = useNavigate();
@@ -67,6 +68,74 @@ const CommunityHome = () => {
           </button>
         ))}
       </div>
+
+      {(() => {
+        const tasks = [
+          { patientId: 4, type: "宣教", priority: "紧急", bed: "—", name: "陈敏", sub: "高血压日常管理 · 09:00" },
+          { patientId: 2, type: "沟通", priority: "紧急", bed: "—", name: "李娜", sub: "回复用药咨询 · 10:00" },
+          { patientId: 3, type: "宣教", priority: "重要", bed: "—", name: "王强", sub: "糖尿病饮食指南 · 11:00" },
+          { patientId: 1, type: "沟通", priority: "重要", bed: "—", name: "张伟", sub: "随访血糖记录 · 13:30" },
+          { patientId: 4, type: "转诊", priority: "普通", bed: "—", name: "陈敏", sub: "上转鼓楼医院互联网医院 · 14:00" },
+          { patientId: 6, type: "转诊", priority: "普通", bed: "—", name: "周婷", sub: "上转鼓楼医院互联网医院 · 16:00" },
+        ];
+        const typeStyle: Record<string, string> = {
+          "宣教": "bg-accent/10 text-accent",
+          "沟通": "bg-primary/10 text-primary",
+          "转诊": "bg-success/10 text-success",
+        };
+        const priorityStyle: Record<string, string> = {
+          "紧急": "bg-destructive/10 text-destructive",
+          "重要": "bg-warning/15 text-warning",
+          "普通": "bg-muted text-muted-foreground",
+        };
+        const handleClick = (t: typeof tasks[number]) => {
+          if (t.type === "沟通") navigate(`/community/chat/patient/${t.patientId}`);
+          else if (t.type === "宣教") navigate(`/community/education`);
+          else if (t.type === "转诊") {
+            toast({ title: "已发起转诊", description: "正在跳转至鼓楼医院互联网医院..." });
+            setTimeout(() => window.open("https://www.njglyy.com/", "_blank"), 600);
+          }
+        };
+        return (
+          <>
+            <div className="flex items-center justify-between px-1 pt-2">
+              <div className="flex items-center gap-1.5">
+                <ClipboardCheck className="h-4 w-4 text-accent" />
+                <h3 className="text-sm font-semibold">今日待办清单</h3>
+              </div>
+              <span className="text-[10px] text-muted-foreground">共 {tasks.length} 项 · 按优先级</span>
+            </div>
+            <Card className="overflow-hidden">
+              <div className="divide-y">
+                {tasks.map((t, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleClick(t)}
+                    className="flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-muted/40"
+                  >
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-[11px] font-semibold text-muted-foreground">
+                      {i + 1}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${typeStyle[t.type]}`}>
+                          {t.type}
+                        </span>
+                        <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${priorityStyle[t.priority]}`}>
+                          {t.priority}
+                        </span>
+                        <span className="text-[13px] font-semibold">{t.name}</span>
+                      </div>
+                      <p className="mt-1 truncate text-[11px] text-muted-foreground">{t.sub}</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  </button>
+                ))}
+              </div>
+            </Card>
+          </>
+        );
+      })()}
     </div>
   );
 };

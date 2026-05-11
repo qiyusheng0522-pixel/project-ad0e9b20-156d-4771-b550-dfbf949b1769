@@ -295,45 +295,15 @@ const NurseEducation = () => {
         }
       >
         <div className="space-y-3 py-2">
-          <div>
-            <p className="mb-2 text-xs font-medium text-muted-foreground">推送方式</p>
-            <div className="grid grid-cols-2 gap-2">
-              {(["batch", "single"] as const).map((m) => (
-                <button
-                  key={m}
-                  onClick={() => pushTargetSheet && setPushTargetSheet({ ...pushTargetSheet, mode: m })}
-                  className={`rounded-lg border p-2.5 text-xs transition-colors ${
-                    pushTargetSheet?.mode === m ? "border-accent bg-accent/10 font-medium text-accent" : ""
-                  }`}
-                >
-                  {m === "batch" ? "批量(按科室)" : "单患者"}
-                </button>
-              ))}
-            </div>
+          <p className="text-xs font-medium text-muted-foreground">选择患者</p>
+          <div className="space-y-1.5">
+            {learners.map((l, i) => (
+              <label key={l.id} className="flex items-center gap-3 rounded-lg border p-2.5 text-xs">
+                <input type="checkbox" defaultChecked={i === 0} className="h-4 w-4 accent-accent" />
+                <span className="flex-1">{l.name} · 床 {l.bed}</span>
+              </label>
+            ))}
           </div>
-          <div>
-            <p className="mb-2 text-xs font-medium text-muted-foreground">
-              {pushTargetSheet?.mode === "batch" ? "选择科室/标签" : "选择患者"}
-            </p>
-            <div className="space-y-1.5">
-              {(pushTargetSheet?.mode === "batch"
-                ? [
-                    { label: "心内科", count: 28 },
-                    { label: "内分泌科", count: 15 },
-                    { label: "外科康复", count: 8 },
-                    { label: "高血压标签", count: 36 },
-                  ]
-                : learners.map((l) => ({ label: `${l.name} · 床 ${l.bed}`, count: 0 }))
-              ).map((g, i) => (
-                <label key={i} className="flex items-center gap-3 rounded-lg border p-2.5 text-xs">
-                  <input type="checkbox" defaultChecked={i === 0} className="h-4 w-4 accent-accent" />
-                  <span className="flex-1">{g.label}</span>
-                  {g.count > 0 && <span className="text-muted-foreground">{g.count} 人</span>}
-                </label>
-              ))}
-            </div>
-          </div>
-          <Textarea placeholder="附言(可选)" className="min-h-[50px] text-xs" />
         </div>
       </ActionSheet>
 
