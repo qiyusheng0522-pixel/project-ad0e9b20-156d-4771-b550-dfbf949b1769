@@ -1,12 +1,14 @@
-import { useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   ArrowLeft, MessageSquare, Phone, Users as UsersIcon, FileText,
-  ChevronDown, CheckCircle2, Stethoscope, TrendingUp, Activity,
+  ChevronDown, CheckCircle2, Stethoscope, TrendingUp, Activity, BookOpen, Send,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import ActionSheet from "@/components/nurse/ActionSheet";
+import { eduByCategory } from "@/data/education";
 
 type Med = { name: string; freq: string; per: string; start: string; end: string; days: number; ended?: boolean };
 type Health = { label: string; value: string; unit: string; status: "正常" | "偏高" | "偏低" };
