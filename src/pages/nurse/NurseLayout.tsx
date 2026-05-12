@@ -1,10 +1,11 @@
 import { NavLink, Outlet, Link, useLocation } from "react-router-dom";
-import { Home, MessageSquare, FileText, User as UserIcon, Users, ArrowLeft, Bell, Wifi, Signal, BatteryFull } from "lucide-react";
+import { Home, MessageSquare, FileText, User as UserIcon, Users, ArrowLeft, Bell, Wifi, Signal, BatteryFull, Stethoscope } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const tabs = [
   { to: "/nurse", icon: Home, label: "工作台", end: true },
   { to: "/nurse/patients", icon: Users, label: "患者" },
+  { to: "/nurse/followup", icon: Stethoscope, label: "随访" },
   { to: "/nurse/chat", icon: MessageSquare, label: "沟通" },
   { to: "/nurse/profile", icon: UserIcon, label: "我的" },
 ];
@@ -14,6 +15,7 @@ const titleMap: Record<string, string> = {
   "/nurse/patients": "患者管理",
   "/nurse/handover": "出院转交",
   "/nurse/education": "宣教管理",
+  "/nurse/followup": "随访管理",
   "/nurse/chat": "沟通",
   "/nurse/profile": "我的",
 };
@@ -66,7 +68,7 @@ const NurseLayout = () => {
 
             {!isFullscreenChild && (
               <nav className="absolute bottom-0 left-0 right-0 z-40 border-t bg-card/95 backdrop-blur-md">
-                <div className="grid grid-cols-4">
+                <div className="grid grid-cols-5">
                   {tabs.map((t) => (
                     <NavLink
                       key={t.to}

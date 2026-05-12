@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Users, BookOpen, MessageSquare, AlertTriangle, Activity, ClipboardCheck, ChevronRight } from "lucide-react";
+import { Users, BookOpen, MessageSquare, AlertTriangle, Activity, ClipboardCheck, ChevronRight, Stethoscope } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
@@ -27,6 +27,11 @@ const CommunityHome = () => {
       key: "abnormal", icon: AlertTriangle, label: "异常", sub: "异常患者待处置",
       count: 2, unit: "位异常", color: "text-destructive", bg: "bg-destructive/10",
       to: "/community/patients?tab=abnormal",
+    },
+    {
+      key: "followup", icon: Stethoscope, label: "随访", sub: "术后/慢病随访",
+      count: 4, unit: "位待随访", color: "text-warning", bg: "bg-warning/10",
+      to: "/community/followup",
     },
   ];
 
@@ -73,14 +78,17 @@ const CommunityHome = () => {
         const tasks = [
           { patientId: 4, type: "宣教", priority: "紧急", bed: "—", name: "陈敏", sub: "高血压日常管理 · 09:00" },
           { patientId: 2, type: "沟通", priority: "紧急", bed: "—", name: "李娜", sub: "回复用药咨询 · 10:00" },
+          { patientId: 11, type: "随访", priority: "紧急", bed: "—", name: "韩启航", sub: "术后第 3 天电话随访 · 10:30" },
           { patientId: 3, type: "宣教", priority: "重要", bed: "—", name: "王强", sub: "糖尿病饮食指南 · 11:00" },
           { patientId: 1, type: "沟通", priority: "重要", bed: "—", name: "张伟", sub: "随访血糖记录 · 13:30" },
+          { patientId: 12, type: "随访", priority: "重要", bed: "—", name: "王晓彤", sub: "肩袖功能评估 · 14:30" },
           { patientId: 4, type: "转诊", priority: "普通", bed: "—", name: "陈敏", sub: "上转鼓楼医院互联网医院 · 14:00" },
           { patientId: 6, type: "转诊", priority: "普通", bed: "—", name: "周婷", sub: "上转鼓楼医院互联网医院 · 16:00" },
         ];
         const typeStyle: Record<string, string> = {
           "宣教": "bg-accent/10 text-accent",
           "沟通": "bg-primary/10 text-primary",
+          "随访": "bg-warning/15 text-warning",
           "转诊": "bg-success/10 text-success",
         };
         const priorityStyle: Record<string, string> = {
@@ -89,7 +97,7 @@ const CommunityHome = () => {
           "普通": "bg-muted text-muted-foreground",
         };
         const handleClick = (t: typeof tasks[number]) => {
-          if (t.type === "沟通") navigate(`/community/chat/patient/${t.patientId}`);
+          if (t.type === "沟通" || t.type === "随访") navigate(`/community/chat/patient/${t.patientId}`);
           else if (t.type === "宣教") navigate(`/community/education`);
           else if (t.type === "转诊") {
             toast({ title: "已发起转诊", description: "正在跳转至鼓楼医院互联网医院..." });

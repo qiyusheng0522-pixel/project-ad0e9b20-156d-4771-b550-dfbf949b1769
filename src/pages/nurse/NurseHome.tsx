@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import {
   Users, MessageSquare, BookOpen, LogOut as LogOutIcon, Activity,
-  Syringe, Droplet, ClipboardCheck, Clock, AlertTriangle, ChevronRight,
+  Syringe, Droplet, ClipboardCheck, Clock, AlertTriangle, ChevronRight, Stethoscope,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +29,11 @@ const NurseHome = () => {
       key: "handover", icon: LogOutIcon, label: "出院转交", sub: "下转社区 / 居家护理",
       count: 3, unit: "条待交接", color: "text-primary", bg: "bg-primary/10",
       to: "/nurse/handover",
+    },
+    {
+      key: "followup", icon: Stethoscope, label: "随访", sub: "术后/慢病随访",
+      count: 4, unit: "位待随访", color: "text-accent", bg: "bg-accent/10",
+      to: "/nurse/followup",
     },
   ];
 
@@ -77,14 +82,17 @@ const NurseHome = () => {
         const tasks = [
           { patientId: 4, type: "宣教", priority: "紧急", bed: "0617", name: "陈敏", sub: "出院饮食指导 · 09:00" },
           { patientId: 2, type: "沟通", priority: "紧急", bed: "0508", name: "李娜", sub: "回复用药咨询 · 10:00" },
+          { patientId: 11, type: "随访", priority: "紧急", bed: "—", name: "韩启航", sub: "术后第 3 天电话随访 · 10:30" },
           { patientId: 3, type: "宣教", priority: "重要", bed: "0215", name: "王强", sub: "低碘饮食宣教 · 11:00" },
           { patientId: 1, type: "沟通", priority: "重要", bed: "0312", name: "张伟", sub: "随访血糖记录 · 13:30" },
+          { patientId: 12, type: "随访", priority: "重要", bed: "—", name: "王晓彤", sub: "肩袖功能评估 · 14:30" },
           { patientId: 4, type: "出院转交", priority: "普通", bed: "0617", name: "陈敏", sub: "下转鼓楼社区卫生站 · 14:00" },
           { patientId: 6, type: "出院转交", priority: "普通", bed: "0305", name: "周婷", sub: "下转兰园社区 · 16:00" },
         ];
         const typeStyle: Record<string, string> = {
           "宣教": "bg-accent/10 text-accent",
           "沟通": "bg-primary/10 text-primary",
+          "随访": "bg-warning/15 text-warning",
           "出院转交": "bg-success/10 text-success",
         };
         const priorityStyle: Record<string, string> = {
@@ -107,6 +115,10 @@ const NurseHome = () => {
                   <button
                     key={i}
                     onClick={() => {
+                      if (t.type === "随访") {
+                        navigate(`/nurse/chat/patient/${t.patientId}`);
+                        return;
+                      }
                       const action =
                         t.type === "宣教" ? "?action=push-edu" :
                         t.type === "沟通" ? "?action=chat" :
