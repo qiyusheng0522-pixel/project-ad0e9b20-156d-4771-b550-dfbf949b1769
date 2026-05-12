@@ -22,11 +22,11 @@ type Patient = {
 };
 
 const seed: Patient[] = [
-  { id: 1, name: "张伟", age: 58, gender: "男", tags: ["高血压III级", "术后"], source: "南京市鼓楼医院", isNew: true, lastVisit: "今日下转" },
-  { id: 2, name: "李建国", age: 62, gender: "男", tags: ["糖尿病", "异常↑"], source: "兰园社区", abnormal: true, lastVisit: "1 小时前" },
-  { id: 3, name: "刘秀英", age: 67, gender: "女", tags: ["高血压"], source: "兰园社区", lastVisit: "3 天前" },
-  { id: 4, name: "陈敏", age: 55, gender: "女", tags: ["糖尿病II型"], source: "南京市鼓楼医院", isNew: true, lastVisit: "今日下转" },
-  { id: 5, name: "周春华", age: 71, gender: "女", tags: ["糖尿病", "异常↑"], source: "兰园社区", abnormal: true, lastVisit: "30 分钟前" },
+  { id: 1, name: "张伟", age: 58, gender: "男", tags: ["2 型糖尿病", "出院 3 天"], source: "南京市鼓楼医院", isNew: true, lastVisit: "今日下转" },
+  { id: 2, name: "李建国", age: 62, gender: "男", tags: ["2 型糖尿病", "血糖↑"], source: "兰园社区", abnormal: true, lastVisit: "1 小时前" },
+  { id: 3, name: "刘秀英", age: 67, gender: "女", tags: ["桥本甲状腺炎"], source: "兰园社区", lastVisit: "3 天前" },
+  { id: 4, name: "陈敏", age: 55, gender: "女", tags: ["1 型糖尿病"], source: "南京市鼓楼医院", isNew: true, lastVisit: "今日下转" },
+  { id: 5, name: "周春华", age: 71, gender: "女", tags: ["糖尿病酮症", "血糖↑"], source: "兰园社区", abnormal: true, lastVisit: "30 分钟前" },
 ];
 
 const tabs = [
@@ -157,16 +157,16 @@ const CommunityPatients = () => {
           <div className="space-y-3 py-2 text-xs">
             <div className="grid grid-cols-3 gap-2">
               <div className="rounded bg-muted/40 p-2 text-center">
-                <p className="text-muted-foreground">血压</p>
-                <p className={`mt-0.5 font-semibold ${detail.abnormal ? "text-destructive" : ""}`}>142/88</p>
+                <p className="text-muted-foreground">空腹血糖</p>
+                <p className={`mt-0.5 font-semibold ${detail.abnormal ? "text-destructive" : ""}`}>{detail.abnormal ? "10.6" : "6.2"}</p>
               </div>
               <div className="rounded bg-muted/40 p-2 text-center">
-                <p className="text-muted-foreground">血糖</p>
-                <p className={`mt-0.5 font-semibold ${detail.abnormal ? "text-destructive" : ""}`}>{detail.abnormal ? "12.8" : "6.2"}</p>
+                <p className="text-muted-foreground">糖化</p>
+                <p className={`mt-0.5 font-semibold ${detail.abnormal ? "text-destructive" : ""}`}>{detail.abnormal ? "9.1%" : "6.8%"}</p>
               </div>
               <div className="rounded bg-muted/40 p-2 text-center">
-                <p className="text-muted-foreground">心率</p>
-                <p className="mt-0.5 font-semibold">78</p>
+                <p className="text-muted-foreground">TSH</p>
+                <p className="mt-0.5 font-semibold">2.4</p>
               </div>
             </div>
             <div className="rounded-lg border p-3">
@@ -176,8 +176,8 @@ const CommunityPatients = () => {
             <div className="rounded-lg border p-3">
               <p className="font-medium">用药情况</p>
               <ul className="mt-1 space-y-1 text-muted-foreground">
-                <li>· 苯磺酸氨氯地平片 5mg / 日</li>
-                <li>· 二甲双胍 0.5g / 次,每日 2 次</li>
+                <li>· 二甲双胍 0.5g / 次,每日 3 次</li>
+                <li>· 甘精胰岛素 16U 睡前皮下</li>
               </ul>
             </div>
             <div className="rounded-lg border p-3">

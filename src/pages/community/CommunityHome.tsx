@@ -14,7 +14,7 @@ const CommunityHome = () => {
       to: "/community/patients",
     },
     {
-      key: "education", icon: BookOpen, label: "宣教", sub: "高血压/糖尿病管理",
+      key: "education", icon: BookOpen, label: "宣教", sub: "糖尿病/甲状腺管理",
       count: 6, unit: "条待推送", color: "text-warning", bg: "bg-warning/10",
       to: "/community/education",
     },
@@ -76,14 +76,14 @@ const CommunityHome = () => {
 
       {(() => {
         const tasks = [
-          { patientId: 4, type: "宣教", priority: "紧急", bed: "—", name: "陈敏", sub: "高血压日常管理 · 09:00" },
-          { patientId: 2, type: "沟通", priority: "紧急", bed: "—", name: "李娜", sub: "回复用药咨询 · 10:00" },
-          { patientId: 11, type: "随访", priority: "紧急", bed: "—", name: "韩启航", sub: "术后第 3 天电话随访 · 10:30" },
-          { patientId: 3, type: "宣教", priority: "重要", bed: "—", name: "王强", sub: "糖尿病饮食指南 · 11:00" },
-          { patientId: 1, type: "沟通", priority: "重要", bed: "—", name: "张伟", sub: "随访血糖记录 · 13:30" },
-          { patientId: 12, type: "随访", priority: "重要", bed: "—", name: "王晓彤", sub: "肩袖功能评估 · 14:30" },
-          { patientId: 4, type: "转诊", priority: "普通", bed: "—", name: "陈敏", sub: "上转鼓楼医院互联网医院 · 14:00" },
-          { patientId: 6, type: "转诊", priority: "普通", bed: "—", name: "周婷", sub: "上转鼓楼医院互联网医院 · 16:00" },
+          { patientId: 4, type: "宣教", priority: "紧急", bed: "—", name: "陈敏", sub: "糖尿病饮食指南 · 09:00" },
+          { patientId: 2, type: "沟通", priority: "紧急", bed: "—", name: "李娜", sub: "回复胰岛素用药咨询 · 10:00" },
+          { patientId: 11, type: "随访", priority: "紧急", bed: "—", name: "韩启航", sub: "出院第 3 天血糖随访 · 10:30" },
+          { patientId: 3, type: "宣教", priority: "重要", bed: "—", name: "王强", sub: "甲亢低碘饮食宣教 · 11:00" },
+          { patientId: 1, type: "沟通", priority: "重要", bed: "—", name: "张伟", sub: "回访 7 日血糖记录 · 13:30" },
+          { patientId: 12, type: "随访", priority: "重要", bed: "—", name: "王晓彤", sub: "甲亢复诊 TSH 评估 · 14:30" },
+          { patientId: 4, type: "转诊", priority: "普通", bed: "—", name: "陈敏", sub: "上转鼓楼医院 · 内分泌科 · 14:00" },
+          { patientId: 6, type: "转诊", priority: "普通", bed: "—", name: "周婷", sub: "上转鼓楼医院 · 内分泌科 · 16:00" },
         ];
         const typeStyle: Record<string, string> = {
           "宣教": "bg-accent/10 text-accent",

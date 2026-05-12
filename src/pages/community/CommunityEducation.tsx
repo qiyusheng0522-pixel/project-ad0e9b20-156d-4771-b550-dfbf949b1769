@@ -9,21 +9,23 @@ import ActionSheet from "@/components/nurse/ActionSheet";
 
 const todos = [
   { stage: "新建档", color: "bg-accent/10 text-accent border-accent/30", todos: [
-    { title: "高血压自我监测 · 单人推送", patient: "张伟 · 朝阳社区", content: "《家庭血压监测要点》", due: "今日 16:00" },
+    { title: "家庭血糖监测 · 单人推送", patient: "张伟 · 兰园社区", content: "《家庭血糖监测要点》", due: "今日 16:00" },
   ] },
   { stage: "随访中", color: "bg-warning/10 text-warning border-warning/30", todos: [
     { title: "糖尿病饮食指南 · 多人推送", patient: "糖尿病小组 · 12 人", content: "《低糖饮食与加餐建议》", due: "明日 10:00" },
   ] },
   { stage: "复诊期", color: "bg-success/10 text-success border-success/30", todos: [
-    { title: "用药安全宣教 · 单人推送", patient: "刘秀英 · 朝阳社区", content: "《降压药漏服补救方法》", due: "明日 09:00" },
+    { title: "甲减用药依从性 · 单人推送", patient: "刘秀英 · 兰园社区", content: "《左甲状腺素空腹服用须知》", due: "明日 09:00" },
   ] },
 ];
 
 const library = [
-  { id: 1, title: "家庭血压监测要点", category: "高血压", duration: "5 min" },
+  { id: 1, title: "家庭血糖监测要点", category: "糖尿病", duration: "5 min" },
   { id: 2, title: "低糖饮食与加餐建议", category: "糖尿病", duration: "6 min" },
   { id: 3, title: "胰岛素居家注射规范", category: "糖尿病", duration: "4 min" },
-  { id: 4, title: "降压药漏服补救方法", category: "高血压", duration: "3 min" },
+  { id: 4, title: "甲减用药依从性", category: "甲状腺", duration: "3 min" },
+  { id: 5, title: "甲亢低碘饮食指引", category: "甲状腺", duration: "4 min" },
+  { id: 6, title: "低血糖识别与处理", category: "糖尿病", duration: "4 min" },
 ];
 
 const CommunityEducation = () => {
@@ -134,8 +136,8 @@ const CommunityEducation = () => {
       >
         <div className="space-y-2 py-2 text-xs">
           {[
-            { name: "高血压随访组", count: 24 },
-            { name: "糖尿病随访组", count: 18 },
+            { name: "糖尿病随访组", count: 24 },
+            { name: "甲状腺随访组", count: 18 },
             { name: "新建档患者", count: 3 },
           ].map((g) => (
             <div key={g.name} className="flex items-center justify-between rounded-lg border p-3">

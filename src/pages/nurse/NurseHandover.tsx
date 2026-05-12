@@ -55,7 +55,7 @@ const NurseHandover = () => {
             <div>
               <p className="mb-1.5 text-xs font-medium text-muted-foreground">护理记录汇总</p>
               <div className="rounded-lg bg-muted/40 p-3 text-xs leading-relaxed">
-                住院 5 天,血压控制平稳(140/85 mmHg),无不良反应。已完成出院宣教及用药指导。建议社区随访每周一次。
+                住院 5 天,空腹血糖控制在 6.2 mmol/L、餐后 7.4 mmol/L,糖化血红蛋白 6.8%,无低血糖事件。已完成胰岛素注射宣教及饮食指导。建议社区每周随访血糖一次。
               </div>
             </div>
             <div>

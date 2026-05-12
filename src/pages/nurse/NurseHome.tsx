@@ -80,14 +80,14 @@ const NurseHome = () => {
       {/* 今日待办清单 */}
       {(() => {
         const tasks = [
-          { patientId: 4, type: "宣教", priority: "紧急", bed: "0617", name: "陈敏", sub: "出院饮食指导 · 09:00" },
-          { patientId: 2, type: "沟通", priority: "紧急", bed: "0508", name: "李娜", sub: "回复用药咨询 · 10:00" },
-          { patientId: 11, type: "随访", priority: "紧急", bed: "—", name: "韩启航", sub: "术后第 3 天电话随访 · 10:30" },
-          { patientId: 3, type: "宣教", priority: "重要", bed: "0215", name: "王强", sub: "低碘饮食宣教 · 11:00" },
-          { patientId: 1, type: "沟通", priority: "重要", bed: "0312", name: "张伟", sub: "随访血糖记录 · 13:30" },
-          { patientId: 12, type: "随访", priority: "重要", bed: "—", name: "王晓彤", sub: "肩袖功能评估 · 14:30" },
-          { patientId: 4, type: "出院转交", priority: "普通", bed: "0617", name: "陈敏", sub: "下转鼓楼社区卫生站 · 14:00" },
-          { patientId: 6, type: "出院转交", priority: "普通", bed: "0305", name: "周婷", sub: "下转兰园社区 · 16:00" },
+          { patientId: 4, type: "宣教", priority: "紧急", bed: "0617", name: "陈敏", sub: "1 型糖尿病出院饮食指导 · 09:00" },
+          { patientId: 2, type: "沟通", priority: "紧急", bed: "0508", name: "李娜", sub: "回复胰岛素剂量咨询 · 10:00" },
+          { patientId: 11, type: "随访", priority: "紧急", bed: "—", name: "韩启航", sub: "出院第 3 天血糖随访 · 10:30" },
+          { patientId: 3, type: "宣教", priority: "重要", bed: "0215", name: "王强", sub: "Graves 甲亢低碘饮食宣教 · 11:00" },
+          { patientId: 1, type: "沟通", priority: "重要", bed: "0312", name: "张伟", sub: "回访 7 日血糖记录 · 13:30" },
+          { patientId: 12, type: "随访", priority: "重要", bed: "—", name: "王晓彤", sub: "甲亢复诊 TSH 评估 · 14:30" },
+          { patientId: 4, type: "出院转交", priority: "普通", bed: "0617", name: "陈敏", sub: "下转兰园社区 · 内分泌随访 · 14:00" },
+          { patientId: 6, type: "出院转交", priority: "普通", bed: "0305", name: "周婷", sub: "下转兰园社区 · 妊糖随访 · 16:00" },
         ];
         const typeStyle: Record<string, string> = {
           "宣教": "bg-accent/10 text-accent",
