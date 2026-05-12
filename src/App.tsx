@@ -15,12 +15,14 @@ import NurseEducation from "./pages/nurse/NurseEducation.tsx";
 import NurseChat from "./pages/nurse/NurseChat.tsx";
 import NurseChatList from "./pages/nurse/NurseChatList.tsx";
 import NurseProfile from "./pages/nurse/NurseProfile.tsx";
+import NurseFollowup from "./pages/nurse/NurseFollowup.tsx";
 import CommunityLayout from "./pages/community/CommunityLayout.tsx";
 import CommunityHome from "./pages/community/CommunityHome.tsx";
 import CommunityPatients from "./pages/community/CommunityPatients.tsx";
 import CommunityEducation from "./pages/community/CommunityEducation.tsx";
 import CommunityMessages from "./pages/community/CommunityMessages.tsx";
 import CommunityChat from "./pages/community/CommunityChat.tsx";
+import CommunityFollowup from "./pages/community/CommunityFollowup.tsx";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +43,7 @@ const App = () => (
             <Route path="education" element={<NurseEducation />} />
             <Route path="chat" element={<NurseChatList />} />
             <Route path="chat/:type/:id" element={<NurseChat />} />
+            <Route path="followup" element={<NurseFollowup />} />
             <Route path="profile" element={<NurseProfile />} />
           </Route>
           <Route path="/community" element={<CommunityLayout />}>
@@ -49,6 +52,7 @@ const App = () => (
             <Route path="education" element={<CommunityEducation />} />
             <Route path="messages" element={<CommunityMessages />} />
             <Route path="chat/:type/:id" element={<CommunityChat />} />
+            <Route path="followup" element={<CommunityFollowup />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
