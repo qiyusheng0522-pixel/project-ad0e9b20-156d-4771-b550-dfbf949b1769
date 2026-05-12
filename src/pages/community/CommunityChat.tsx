@@ -24,11 +24,11 @@ const CommunityChat = () => {
       phone: "13800138999",
       isDoctor: false,
       abnormal: true,
-      diagnosis: "2 型糖尿病 · 高血压 · 过敏:无",
+      diagnosis: "2 型糖尿病 · 周围神经病变 · 过敏:无",
       vitals: [
         { label: "空腹血糖", value: "11.6", abnormal: true },
-        { label: "血压", value: "146/92" },
-        { label: "心率", value: "78" },
+        { label: "餐后 2h", value: "15.4", abnormal: true },
+        { label: "糖化", value: "9.0%" },
       ],
     };
   }, [isDoctor]);

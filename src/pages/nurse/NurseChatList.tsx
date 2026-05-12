@@ -6,10 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 
 const sessions = [
-  { id: 1, kind: "patient" as const, name: "张伟", sub: "床 0312 · 高血压 III 级", last: "您先平卧休息，我马上过来。", time: "09:31", unread: 2, abnormal: true, vitals: { 血压: "178/108", 心率: "96", 血氧: "96%" } },
-  { id: 3, kind: "patient" as const, name: "王强", sub: "床 0215 · 心律失常", last: "护士，今天的药我吃了。", time: "08:45", unread: 0, abnormal: true, vitals: { 心率: "118", 血压: "138/86", 血氧: "97%" } },
-  { id: 2, kind: "patient" as const, name: "李娜", sub: "床 0508 · 2 型糖尿病", last: "好的谢谢。", time: "昨日", unread: 0, abnormal: false, vitals: { 血糖: "6.2", 血压: "126/78", 心率: "82" } },
-  { id: 4, kind: "doctor" as const, name: "王主任", sub: "心内科 · 主治医师", last: "请加测一次心率和血氧。", time: "09:14", unread: 1, abnormal: false },
+  { id: 1, kind: "patient" as const, name: "张伟", sub: "床 0312 · 2 型糖尿病 · 酮症倾向", last: "护士,我有点心慌出汗。", time: "09:31", unread: 2, abnormal: true, vitals: { 随机血糖: "16.8", 糖化: "9.2%", 血压: "138/86" } },
+  { id: 3, kind: "patient" as const, name: "王强", sub: "床 0215 · Graves 甲亢", last: "护士,今天的甲巯咪唑我吃了。", time: "08:45", unread: 0, abnormal: true, vitals: { 心率: "128", "FT4": "↑", "TSH": "↓" } },
+  { id: 2, kind: "patient" as const, name: "李娜", sub: "床 0508 · 2 型糖尿病 · 周围神经病变", last: "好的谢谢。", time: "昨日", unread: 0, abnormal: false, vitals: { 空腹血糖: "5.5", 糖化: "8.0%", 血压: "126/78" } },
+  { id: 4, kind: "doctor" as const, name: "王主任", sub: "内分泌科 · 主治医师", last: "请复测一次餐后 2h 血糖。", time: "09:14", unread: 1, abnormal: false },
 ];
 
 const NurseChatList = () => {

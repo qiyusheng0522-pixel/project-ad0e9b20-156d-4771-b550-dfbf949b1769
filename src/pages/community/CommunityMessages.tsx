@@ -8,8 +8,8 @@ const sessions = [
   { id: 1, kind: "patient" as const, name: "李建国", sub: "兰园社区 · 糖尿病", source: "兰园社区", last: "医生,我空腹血糖又高了。", time: "09:31", unread: 2, abnormal: true },
   { id: 5, kind: "patient" as const, name: "周春华", sub: "兰园社区 · 糖尿病", source: "兰园社区", last: "今天测的血糖给您发过去。", time: "09:10", unread: 1, abnormal: true },
   { id: 4, kind: "doctor" as const, name: "王主任", sub: "南京市鼓楼医院 · 内分泌科", source: "南京市鼓楼医院", last: "陈敏的复诊安排在周三上午。", time: "09:14", unread: 1, abnormal: false },
-  { id: 2, kind: "patient" as const, name: "张伟", sub: "南京市鼓楼医院下转 · 高血压", source: "南京市鼓楼医院", last: "好的,我按时吃药。", time: "昨日", unread: 0, abnormal: false },
-  { id: 3, kind: "patient" as const, name: "刘秀英", sub: "兰园社区 · 高血压", source: "兰园社区", last: "谢谢张医生。", time: "昨日", unread: 0, abnormal: false },
+  { id: 2, kind: "patient" as const, name: "张伟", sub: "南京市鼓楼医院下转 · 2 型糖尿病", source: "南京市鼓楼医院", last: "好的,我按时打胰岛素。", time: "昨日", unread: 0, abnormal: false },
+  { id: 3, kind: "patient" as const, name: "刘秀英", sub: "兰园社区 · 桥本甲状腺炎", source: "兰园社区", last: "谢谢张医生。", time: "昨日", unread: 0, abnormal: false },
 ];
 
 const CommunityMessages = () => {

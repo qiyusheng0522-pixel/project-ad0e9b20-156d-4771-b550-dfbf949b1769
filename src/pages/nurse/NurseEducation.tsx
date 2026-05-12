@@ -9,16 +9,16 @@ import { toast } from "@/hooks/use-toast";
 import ActionSheet from "@/components/nurse/ActionSheet";
 
 const aiRecommended = [
-  { id: 1, title: "高血压日常管理", category: "心血管", match: "98%", views: 142, duration: "5 min", desc: "包含血压监测要点、低盐饮食建议、运动指导及用药依从性提醒。" },
-  { id: 2, title: "糖尿病饮食指南", category: "内分泌", match: "95%", views: 218, duration: "6 min", desc: "三餐搭配示例、升糖指数说明、外出就餐技巧及加餐建议。" },
-  { id: 3, title: "术后康复运动", category: "康复", match: "92%", views: 87, duration: "4 min", desc: "分阶段康复动作演示、注意事项与禁忌运动说明。" },
+  { id: 1, title: "糖尿病饮食指南", category: "糖尿病", match: "98%", views: 218, duration: "6 min", desc: "三餐搭配示例、升糖指数说明、外出就餐技巧及加餐建议。" },
+  { id: 2, title: "胰岛素注射规范", category: "糖尿病", match: "95%", views: 174, duration: "3 min", desc: "标准注射部位轮换、剂量核对与低血糖应急处理。" },
+  { id: 3, title: "甲亢低碘饮食指引", category: "甲状腺", match: "92%", views: 96, duration: "4 min", desc: "甲亢患者忌碘食物清单、就餐注意与外出技巧。" },
 ];
 
 const library = [
-  { id: 1, title: "心衰自我监测", category: "心血管", duration: "5 min", desc: "教患者每日记录体重、尿量与下肢水肿,识别早期失代偿信号。" },
-  { id: 2, title: "胰岛素注射规范", category: "内分泌", duration: "3 min", desc: "标准注射部位轮换、剂量核对与低血糖应急处理。" },
-  { id: 3, title: "用药安全须知", category: "通用", duration: "4 min", desc: "服药时间提醒、禁忌组合、漏服补救方法。" },
-  { id: 4, title: "出院后家庭护理", category: "通用", duration: "8 min", desc: "居家环境改造、跌倒预防、家属协助要点。" },
+  { id: 1, title: "低血糖识别与处理", category: "糖尿病", duration: "4 min", desc: "低血糖典型征兆、15-15 处理法则与家属配合要点。" },
+  { id: 2, title: "家庭血糖监测要点", category: "糖尿病", duration: "5 min", desc: "指尖血糖采集流程、记录方式与异常上报。" },
+  { id: 3, title: "甲减用药依从性", category: "甲状腺", duration: "4 min", desc: "左甲状腺素空腹服用、复查节奏与剂量调整。" },
+  { id: 4, title: "出院后内分泌随访", category: "通用", duration: "8 min", desc: "复诊节奏、化验单解读与社区随访衔接。" },
 ];
 
 const learners = [
@@ -86,10 +86,10 @@ const NurseEducation = () => {
               { title: "入院须知 · 单人推送", patient: "陈敏 · 床 0617", content: "《住院环境与作息介绍》", due: "今日 16:00", mode: "单人" as const },
             ] },
             { stage: "治疗期", color: "bg-warning/10 text-warning border-warning/30", count: 1, todos: [
-              { title: "用药安全宣教 · 多人推送", patient: "心内科 · 12 人", content: "《降压药用法与注意事项》", due: "明日 10:00", mode: "多人" as const },
+              { title: "胰岛素注射宣教 · 多人推送", patient: "内分泌科 · 12 人", content: "《胰岛素注射规范与低血糖应急》", due: "明日 10:00", mode: "多人" as const },
             ] },
             { stage: "出院期", color: "bg-success/10 text-success border-success/30", count: 1, todos: [
-              { title: "居家护理指导 · 单人推送", patient: "王芳 · 床 0408", content: "《出院后饮食与复诊安排》", due: "明日 09:00", mode: "单人" as const },
+              { title: "居家血糖监测指导 · 单人推送", patient: "王芳 · 床 0408", content: "《出院后血糖监测与复诊安排》", due: "明日 09:00", mode: "单人" as const },
             ] },
           ].map((s) => (
             <Card key={s.stage} className="overflow-hidden">
@@ -162,9 +162,9 @@ const NurseEducation = () => {
             </div>
             <div className="divide-y">
               {[
-                { title: "高血压日常管理", target: "心内科 · 28 人", time: "10 分钟前", read: 18 },
-                { title: "糖尿病饮食指南", target: "内分泌 · 15 人", time: "1 小时前", read: 12 },
-                { title: "术后康复运动", target: "外科 · 8 人", time: "今日 09:30", read: 7 },
+                { title: "糖尿病饮食指南", target: "内分泌科 · 28 人", time: "10 分钟前", read: 18 },
+                { title: "胰岛素注射规范", target: "内分泌科 · 15 人", time: "1 小时前", read: 12 },
+                { title: "甲亢低碘饮食指引", target: "内分泌科 · 8 人", time: "今日 09:30", read: 7 },
               ].map((r, i) => (
                 <button
                   key={i}
