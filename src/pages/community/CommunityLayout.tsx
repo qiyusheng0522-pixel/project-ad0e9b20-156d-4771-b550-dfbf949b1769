@@ -1,10 +1,11 @@
 import { NavLink, Outlet, Link, useLocation } from "react-router-dom";
-import { Home, Users, BookOpen, MessageSquare, ArrowLeft, Bell, Wifi, Signal, BatteryFull } from "lucide-react";
+import { Home, Users, BookOpen, MessageSquare, ArrowLeft, Bell, Wifi, Signal, BatteryFull, Stethoscope } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const tabs = [
   { to: "/community", icon: Home, label: "工作台", end: true },
   { to: "/community/patients", icon: Users, label: "患者档案" },
+  { to: "/community/followup", icon: Stethoscope, label: "随访" },
   { to: "/community/education", icon: BookOpen, label: "宣教" },
   { to: "/community/messages", icon: MessageSquare, label: "沟通" },
 ];
@@ -13,6 +14,7 @@ const titleMap: Record<string, string> = {
   "/community": "工作台",
   "/community/patients": "患者档案",
   "/community/education": "宣教管理",
+  "/community/followup": "随访管理",
   "/community/messages": "沟通",
   "/community/refer": "上转鼓楼医院",
 };
@@ -65,7 +67,7 @@ const CommunityLayout = () => {
 
             {!isFullscreenChild && (
               <nav className="absolute bottom-0 left-0 right-0 z-40 border-t bg-card/95 backdrop-blur-md">
-                <div className="grid grid-cols-4">
+                <div className="grid grid-cols-5">
                   {tabs.map((t) => (
                     <NavLink
                       key={t.to}
